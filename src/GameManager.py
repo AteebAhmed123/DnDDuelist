@@ -25,23 +25,23 @@ class GameManager:
         game_assets = self.setup_display()
         running = True
 
+        # Draw background
         while running:
             for event in pygame.event.get():
                 running = self.handle_events(event)
             
-            # Draw background
             self.screen.blit(game_assets, (0, 0))
-            
             # Draw mage at center of screen
-            mage, placement = self.mage.image_at(position_to_draw=(self.SCREEN_WIDTH // 2, self.SCREEN_HEIGHT // 2))
+            magesAndPlacements = self.mage.animate(position_to_draw=(self.SCREEN_WIDTH // 2, self.SCREEN_HEIGHT // 2))
 
-            self.screen.blit(mage, placement)
-            
+            # self.screen.blit(mage, placement)
+            self.screen.blit(magesAndPlacements[0], magesAndPlacements[1])
             # Update display
             pygame.display.flip()
             
             # Cap the frame rate
-            clock.tick(60)
+            clock.tick(10)
+
 
         # Quit game
         pygame.quit()
@@ -53,5 +53,8 @@ class GameManager:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 return False
+            elif event.key == pygame.K_SPACE:
+                print("Space key pressed")
+                self.mage.attack()
             
         return True
