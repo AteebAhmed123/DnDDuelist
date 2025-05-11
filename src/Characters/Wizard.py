@@ -35,7 +35,7 @@ class Wizard(CharacterBlueprint):
         self.current_state = 0
         self.animation_tracker = 0
 
-    def get_sprites_for_mage(self):
+    def get_sprites(self):
         return self.sprite_states[self.current_state]
 
     def animate(self, position_to_draw = None):

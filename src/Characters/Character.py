@@ -7,6 +7,13 @@ class CharacterBlueprint(Sprite):
         super().__init__()
 
     @abstractmethod
-    def initialise_sprite(self, sprite_path):
+    def get_sprites(self):
+        pass
+
+    @abstractmethod
+    def animate(self):
         pass
     
+    @abstractmethod
+    def attack(self):
+        pass
