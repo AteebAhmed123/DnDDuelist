@@ -3,27 +3,24 @@ from SpriteUtil.SpriteUtil import SpriteUtil
 import pygame
 import os
 
-class Mage(CharacterBlueprint):
+class Wizard(CharacterBlueprint):
 
     standing_sprite_coords = [
-            (51,4,78,95),
-            (200,4,78,95),
-            (352,4,78,95),
-            (500,4,78,95),
-            (652,4,78,95)
+            (47,2,86,95),
+            (209,2,86,95),
+            (370,2,86,95),
+            (530,2,86,95)
         ]
     
     attacking_sprite_coords = [
-        (30,106,100,100),
-        (180,106,100,100),
-        (340,106,100,100),
-        (500,106,100,100),
-        (650,106,100,100),
-        (47,207,100,100),
-        (180,207,100,100),
-        (340,207,100,100),
-        (500,207,100,100),
-        (650,207,100,100)
+        (27,421,130,100),
+        (187,421,130,100),
+        (347,421,130,100),
+        (482,421,130,100),
+        (650,421,130,100),
+        (800,421,130,100),
+        (0,530,130,100),
+        (180,530,130,100)
     ]
 
     sprite_states = {
@@ -33,7 +30,7 @@ class Mage(CharacterBlueprint):
 
     def __init__(self):
         super().__init__()
-        self.SPRITE_PATH = "./Assets/mage_sprite.png"
+        self.SPRITE_PATH = "./Assets/wizard_sprite.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.current_state = 0
         self.animation_tracker = 0

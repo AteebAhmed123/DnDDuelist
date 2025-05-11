@@ -1,6 +1,7 @@
 import pygame
 import sys
 from Characters.Mage import Mage
+from Characters.Wizard import Wizard
 
 class GameManager:
     def __init__(self):
@@ -14,6 +15,7 @@ class GameManager:
         
         # Initialize mage
         self.mage = Mage()
+        self.wizard = Wizard()
 
     def setup_display(self):
         background = pygame.image.load("./Assets/image.png")
@@ -32,10 +34,12 @@ class GameManager:
             
             self.screen.blit(game_assets, (0, 0))
             # Draw mage at center of screen
-            magesAndPlacements = self.mage.animate(position_to_draw=(self.SCREEN_WIDTH // 2, self.SCREEN_HEIGHT // 2))
-
+            magesAndPlacements = self.mage.animate(position_to_draw=(650,280))
+             
+            wizardAndPlacements = self.wizard.animate(position_to_draw=(150,280))
             # self.screen.blit(mage, placement)
             self.screen.blit(magesAndPlacements[0], magesAndPlacements[1])
+            self.screen.blit(pygame.transform.flip(wizardAndPlacements[0], True, False) , wizardAndPlacements[1])
             # Update display
             pygame.display.flip()
             
@@ -56,5 +60,6 @@ class GameManager:
             elif event.key == pygame.K_SPACE:
                 print("Space key pressed")
                 self.mage.attack()
+                self.wizard.attack()
             
         return True
