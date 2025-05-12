@@ -2,7 +2,7 @@ import pygame
 import sys
 from Characters.Mage import Mage
 from Characters.Wizard import Wizard
-
+from Utils.HealthBar import HealthBar
 class GameManager:
     def __init__(self):
         # Initialize Pygame
@@ -40,6 +40,13 @@ class GameManager:
             # self.screen.blit(mage, placement)
             self.screen.blit(magesAndPlacements[0], magesAndPlacements[1])
             self.screen.blit(pygame.transform.flip(wizardAndPlacements[0], True, False) , wizardAndPlacements[1])
+            healthBar = HealthBar(self.screen).animate((660,50))
+            # healthBarTwo = list(HealthBar().animate_background((70,20)))
+            # scale health bar
+            # healthBar[0] = pygame.transform.scale(healthBar[0], (230,25))
+            # healthBarTwo[0] = pygame.transform.scale(healthBarTwo[0], (230,25))
+            # self.screen.blit(healthBar[0], healthBar[1])
+            # self.screen.blit(healthBarTwo[0], healthBarTwo[1])
             # Update display
             pygame.display.flip()
             
@@ -62,4 +69,4 @@ class GameManager:
                 self.mage.attack()
                 self.wizard.attack()
             
-        return True
+        return True 
