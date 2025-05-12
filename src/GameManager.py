@@ -40,7 +40,7 @@ class GameManager:
             # self.screen.blit(mage, placement)
             self.screen.blit(magesAndPlacements[0], magesAndPlacements[1])
             self.screen.blit(pygame.transform.flip(wizardAndPlacements[0], True, False) , wizardAndPlacements[1])
-            healthBar = HealthBar(self.screen).animate((660,50))
+            healthBar = HealthBar(100, self.screen).animate((660,50))
             # healthBarTwo = list(HealthBar().animate_background((70,20)))
             # scale health bar
             # healthBar[0] = pygame.transform.scale(healthBar[0], (230,25))
