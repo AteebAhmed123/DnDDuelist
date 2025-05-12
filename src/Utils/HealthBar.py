@@ -41,7 +41,7 @@ class HealthBar(SpriteUtil):
         self.screen.blit(sprite_health, coords_to_draw) 
 
 
-    def animate_health(self, position_to_draw = None):
+    def animate_health_number(self, position_to_draw = None):
         if position_to_draw is None:
             position_to_draw = (0,0)
             
@@ -52,4 +52,4 @@ class HealthBar(SpriteUtil):
 
     def animate(self, position_to_draw = None):
         self.animate_health_background(position_to_draw)
-        self.animate_health(position_to_draw)
+        self.animate_health_number(position_to_draw)
