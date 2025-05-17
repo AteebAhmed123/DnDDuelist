@@ -32,10 +32,7 @@ class CardBlueprint(ABC):
         # Update the card's rectangle for collision detection using the actual position
         self.rect = pygame.Rect(actual_position[0], actual_position[1], 
                                self.dimensions[0], self.dimensions[1])
-        
-        # Draw the collision rectangle for debugging
-        pygame.draw.rect(self.screen, (255, 0, 0), self.rect, 2)  # Red outline
-        
+                
         return True
         
     def is_clicked(self, mouse_pos):
