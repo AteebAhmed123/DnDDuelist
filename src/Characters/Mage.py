@@ -4,7 +4,7 @@ from Utils.HealthBar import HealthBar
 import pygame
 import os
 from Cards.Deck import Deck
-
+from Cards.Hands import Hand
 class Mage(CharacterBlueprint):
 
     standing_sprite_coords = [
@@ -46,7 +46,7 @@ class Mage(CharacterBlueprint):
         
         # Initialize the mage's deck
         self.deck = Deck(screen)
-        self.deck.draw_hand()
+        self.hand = Hand(screen)
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -72,6 +72,7 @@ class Mage(CharacterBlueprint):
         self.health.animate((position_to_draw[0], 
                              position_to_draw[1] - self.health_bar_display_offset))
         self.render_deck(deck_position[0], deck_position[1])
+        self.hand.render(deck_position[0], deck_position[1])
         
     
     def attack(self):
@@ -81,17 +82,11 @@ class Mage(CharacterBlueprint):
     def render_deck(self, center_x, y_position):
         """Render the mage's deck at the specified position"""
         self.deck.render(center_x, y_position)
-        
-    def draw_new_hand(self):
-        """Draw a new hand from the deck"""
-        self.deck.draw_hand()
 
     def handle_card_click(self, mouse_pos):
         """Handle clicks on cards in the mage's hand"""
-        card_index = self.deck.hand.handle_click(mouse_pos)
+        card_index = self.hand.handle_click(mouse_pos)
         if card_index >= 0:
-            # Remove the clicked card
-            self.deck.hand.remove_card(card_index)
-            # Draw a new card if available
-            # if len(self.deck.cards) > 0:
-            #     self.deck.hand.add_card(self.deck.cards.pop(0))
+            self.hand.remove_card(card_index)
+            if (len(self.deck.cards_in_deck) > 0):
+                self.hand.add_card(self.deck.draw_card_from_deck(1)[0])

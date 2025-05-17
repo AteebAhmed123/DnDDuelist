@@ -42,8 +42,8 @@ class Wizard(CharacterBlueprint):
         self.screen = screen
         
         # Initialize the wizard's deck
-        self.deck = Deck(screen)
-        self.deck.draw_hand()
+        # self.deck = Deck(screen)
+        # self.deck.draw_hand()
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -79,6 +79,6 @@ class Wizard(CharacterBlueprint):
         """Render the wizard's deck at the specified position"""
         self.deck.render(center_x, y_position)
         
-    def draw_new_hand(self):
-        """Draw a new hand from the deck"""
-        self.deck.draw_hand()
+    # def draw_new_hand(self):
+    #     """Draw a new hand from the deck"""
+    #     self.deck.draw_hand()
