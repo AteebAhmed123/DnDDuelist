@@ -3,6 +3,7 @@ import sys
 from Characters.Mage import Mage
 from Characters.Wizard import Wizard
 from Utils.HealthBar import HealthBar
+from pygame.sprite import LayeredUpdates
 
 class GameManager:
     def __init__(self):
@@ -15,8 +16,8 @@ class GameManager:
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         
         # Initialize characters
-        self.mage = Mage(self.screen)
-        self.wizard = Wizard(self.screen)
+        self.mage = Mage(self.screen, (650,280))
+        self.wizard = Wizard(self.screen, (150,280))
 
     def setup_display(self):
         background = pygame.image.load("./Assets/image.png")
@@ -38,8 +39,8 @@ class GameManager:
             # Draw characters
             mage_card_x = self.SCREEN_WIDTH // 2 - 250
             mage_card_y = self.SCREEN_HEIGHT - 50
-            self.mage.animate(position_to_draw=(650,280), deck_position=(mage_card_x,mage_card_y))             
-            self.wizard.animate(position_to_draw=(150,280), deck_position=(mage_card_x,mage_card_y))
+            self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.mage)             
+            self.wizard.animate(deck_position=(mage_card_x,mage_card_y))
             
             # Draw mage's cards at bottom right of screen
 

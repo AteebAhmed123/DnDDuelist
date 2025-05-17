@@ -12,3 +12,8 @@ class BlastAllVsBlastMe(CardBlueprint):
 
     def get_sprite_coords(self):
         return self.CARD_COORDS 
+    
+    def apply_affect(self, target_position):
+        print(f"Blast All vs Blast Me!")
+        
+        

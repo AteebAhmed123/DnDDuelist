@@ -35,7 +35,7 @@ class Mage(CharacterBlueprint):
 
     health_bar_display_offset = 220    
 
-    def __init__(self, screen):
+    def __init__(self, screen, position_to_draw):
         super().__init__()
         self.SPRITE_PATH = "./Assets/mage_sprite.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
@@ -43,15 +43,17 @@ class Mage(CharacterBlueprint):
         self.animation_tracker = 0
         self.health = HealthBar(100, screen)
         self.screen = screen
+        self.position_to_draw = position_to_draw
         
         # Initialize the mage's deck
         self.deck = Deck(screen)
-        self.hand = Hand(screen)
+        self.hand = Hand(screen, self.deck)
+        self.card_played = []
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
 
-    def motion_animation(self, position_to_draw = None):
+    def motion_animation(self):
         sprite_image = self.sprite_states[self.current_state]
 
         if self.animation_tracker > len(sprite_image)-1:
@@ -62,18 +64,22 @@ class Mage(CharacterBlueprint):
         sprite_standing_image = self.sprite.get_sprite(animation_to_render)
         sprite_standing_image_position = self.sprite.draw_sprite_image_at(
             sprite_standing_image, 
-            position_to_draw)  
+            self.position_to_draw)  
 
         self.animation_tracker = self.animation_tracker + 1
         self.screen.blit(sprite_standing_image, sprite_standing_image_position)
     
-    def animate(self, position_to_draw = None, deck_position = None):
-        self.motion_animation(position_to_draw)
-        self.health.animate((position_to_draw[0], 
-                             position_to_draw[1] - self.health_bar_display_offset))
+    def animate(self, deck_position, target):
+        self.motion_animation()
+        self.health.animate((self.position_to_draw[0], 
+                             self.position_to_draw[1] - self.health_bar_display_offset))
         self.render_deck(deck_position[0], deck_position[1])
         self.hand.render(deck_position[0], deck_position[1])
-        
+        if (self.card_played != []):
+            for eachCard in self.card_played:
+                playing_card = eachCard.activate_card(self, target)
+                if (playing_card == False):
+                    self.card_played.remove(eachCard)
     
     def attack(self):
         self.current_state = 1
@@ -86,7 +92,23 @@ class Mage(CharacterBlueprint):
     def handle_card_click(self, mouse_pos):
         """Handle clicks on cards in the mage's hand"""
         card_index = self.hand.handle_click(mouse_pos)
-        if card_index >= 0:
+        if card_index >= 0 and card_index < len(self.hand.cards_in_hand):
+            self.card_played.append(self.hand.cards_in_hand[card_index])
             self.hand.remove_card(card_index)
             if (len(self.deck.cards_in_deck) > 0):
                 self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
+
+    def play_card(self, card):
+        pass
+
+    # def handle_card_click(self, mouse_pos):
+    #     """Handle clicks on cards in the mage's hand"""
+    #     card_index = self.hand.handle_click(mouse_pos)
+    #     if card_index >= 0:
+    #         activated_card =self.hand.remove_card(card_index)
+    #         if (len(self.deck.cards_in_deck) > 0):
+    #             self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
+            
+    #         activated_card.enable_card_played()
+    
+

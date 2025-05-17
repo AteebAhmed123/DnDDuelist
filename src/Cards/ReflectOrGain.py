@@ -12,3 +12,8 @@ class ReflectOrGain(CardBlueprint):
 
     def get_sprite_coords(self):
         return self.CARD_COORDS 
+    
+    def apply_affect(self, target_position):
+        print(f"Reflect or Gain!")
+        
+        

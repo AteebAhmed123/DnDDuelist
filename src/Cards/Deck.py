@@ -22,7 +22,6 @@ class Deck:
         self.SPRITE_PATH = "./Assets/Cards/deck.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.deck_coords = (0, 0, 130, 200)  # Adjust based on your sprite dimensions
-        
         # Initialize with some default cards
         self._initialize_default_cards()
 

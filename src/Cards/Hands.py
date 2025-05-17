@@ -1,13 +1,13 @@
 from Cards.Deck import Deck
 
 class Hand:
-    def __init__(self, screen):
+    def __init__(self, screen, deck):
         """Initialize a hand that can hold up to 5 cards"""
         self.screen = screen
         self.cards_in_hand = []
         self.max_cards = 4
         self.card_positions = []
-        self.deck = Deck(screen)  # Store positions of cards for click detection
+        self.deck = deck # Store positions of cards for click detection
         self.bootstrap_cards_from_deck()
     
     def bootstrap_cards_from_deck(self):
@@ -27,12 +27,10 @@ class Hand:
 
     def remove_card(self, index):
         """Remove a card at the specified index"""
+        card_activated = None
         if 0 <= index < len(self.cards_in_hand):
-            self.cards_in_hand.pop(index)
-            if index < len(self.card_positions):
-                self.card_positions.pop(index)
-            return True
-        return False
+            card_activated = self.cards_in_hand.pop(index)
+        return card_activated
     
     def handle_click(self, mouse_pos):
         """Handle click on cards, return index of clicked card or -1"""
@@ -53,3 +51,4 @@ class Hand:
             x_pos = start_x + (145*i)
             card.render((x_pos, y_position))
             self.card_positions.append((x_pos, y_position)) 
+            

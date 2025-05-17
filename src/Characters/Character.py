@@ -11,7 +11,7 @@ class CharacterBlueprint(Sprite):
         pass
 
     @abstractmethod
-    def animate(self):
+    def animate(self, deck_position):
         pass
     
     @abstractmethod
