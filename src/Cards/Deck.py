@@ -3,7 +3,7 @@ from Cards.BlastAllVsBlastMe import BlastAllVsBlastMe
 from Cards.ReflectOrGain import ReflectOrGain
 from Cards.MagicMissive import MagicMissive
 from SpriteUtil.SpriteUtil import SpriteUtil
-import random   
+import random
 class Deck:
 
     POSSIBLE_CARDS = [

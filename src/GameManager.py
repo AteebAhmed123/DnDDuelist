@@ -4,6 +4,8 @@ from Characters.Mage import Mage
 from Characters.Wizard import Wizard
 from Utils.HealthBar import HealthBar
 from pygame.sprite import LayeredUpdates
+import random
+from TurnIndicator import TurnIndicator
 
 class GameManager:
     def __init__(self):
@@ -18,6 +20,12 @@ class GameManager:
         # Initialize characters
         self.mage = Mage(self.screen, (650,280))
         self.wizard = Wizard(self.screen, (150,280))
+        
+        # Initialize turn indicator
+        self.turn_indicator = TurnIndicator(self.screen)
+        
+        # Turn counter
+        self.turn_counter = 1
 
     def setup_display(self):
         background = pygame.image.load("./Assets/image.png")
@@ -28,34 +36,64 @@ class GameManager:
         clock = pygame.time.Clock()
         game_assets = self.setup_display()
         running = True
-
+        initiative = random.randint(0,1)
+        mage_turn = False
+        wizard_turn = True
+        
+        # Show initial turn indicator
+        current_player = "Wizard" if wizard_turn else "Mage"
+        self.turn_indicator.start_transition(current_player)
+        
         while running:
             for event in pygame.event.get():
-                running = self.handle_events(event)
+                # Only process events if turn indicator is not active
+                if not self.turn_indicator.is_active:
+                    running = self.handle_events(event, mage_turn, wizard_turn)
             
             # Draw background
             self.screen.blit(game_assets, (0, 0))
             
-            # Draw characters
+            # Draw turn counter
+            font = pygame.font.SysFont('Arial', 24)
+            turn_text = font.render(f"Turn {self.turn_counter}", True, (255, 255, 255))
+            self.screen.blit(turn_text, (20, 20))
+            
+            # Draw current player indicator
+            current_player = "Wizard's Turn" if wizard_turn else "Mage's Turn"
+            player_text = font.render(current_player, True, (255, 255, 255))
+            self.screen.blit(player_text, (20, 50))
+            
+            # Animate characters
             mage_card_x = self.SCREEN_WIDTH // 2 - 250
             mage_card_y = self.SCREEN_HEIGHT - 50
-            self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.wizard)             
-            self.wizard.animate(deck_position=(mage_card_x,mage_card_y), target=self.mage)
+            mage_turn_result = self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.wizard, turn=mage_turn)  
+            wizard_turn_result = self.wizard.animate(deck_position=(mage_card_x,mage_card_y), target=self.mage, turn=wizard_turn)
             
-            # Draw mage's cards at bottom right of screen
-
+            # Check for turn transitions
+            turn_changed = False
             
-            # Draw wizard's cards at bottom left of screen
-            # wizard_card_x = self.SCREEN_WIDTH // 2 - 250
-            # wizard_card_y = self.SCREEN_HEIGHT - 400
-            # self.wizard.render_deck(wizard_card_x, wizard_card_y)
+            if mage_turn_result == False:
+                mage_turn = False
+                wizard_turn = True
+                turn_changed = True
+                self.turn_indicator.start_transition("Wizard")
+            elif wizard_turn_result == False:
+                mage_turn = True
+                wizard_turn = False
+                turn_changed = True
+                self.turn_counter += 1  # Increment turn counter after full round
+                self.turn_indicator.start_transition("Mage")
+            
+            # Update and render turn indicator
+            self.turn_indicator.update()
+            self.turn_indicator.render()
             
             pygame.display.flip()
             clock.tick(10)
         pygame.quit()
         sys.exit()
 
-    def handle_events(self, event):
+    def handle_events(self, event, mage_turn, wizard_turn):
         if event.type == pygame.QUIT:
             return False
         elif event.type == pygame.KEYDOWN:
@@ -67,6 +105,8 @@ class GameManager:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Handle card clicks
             mouse_pos = pygame.mouse.get_pos()
-            self.mage.handle_card_click(mouse_pos)
-            # self.wizard.handle_card_click(mouse_pos)
+            if mage_turn == True:
+                self.mage.handle_card_click(mouse_pos)
+            elif wizard_turn == True:
+                self.wizard.handle_card_click(mouse_pos)
         return True 

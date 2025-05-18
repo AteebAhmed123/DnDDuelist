@@ -70,17 +70,20 @@ class Wizard(CharacterBlueprint):
         self.animation_tracker = self.animation_tracker + 1
         self.screen.blit(pygame.transform.flip(sprite_standing_image, True, False), sprite_standing_image_position)
 
-    def animate(self, deck_position, target):
+    def animate(self, deck_position, target, turn):
         self.motion_animation()
         self.health.animate((self.position_to_draw[0], 
                              self.position_to_draw[1] - self.health_bar_display_offset))
-        # self.render_deck(deck_position[0], deck_position[1])
-        # self.hand.render(deck_position[0], deck_position[1])
-        # if (self.card_played != []):
-        #     for eachCard in self.card_played:
-        #         playing_card = eachCard.activate_card(self, target)
-        #         if (playing_card == False):
-        #             self.card_played.remove(eachCard)
+        if turn:
+            self.render_deck(deck_position[0], deck_position[1])
+            self.hand.render(deck_position[0], deck_position[1])
+            if (self.card_played != []):
+                for eachCard in self.card_played:
+                    playing_card = eachCard.activate_card(self, target)
+                    if (playing_card == False):
+                        self.card_played.remove(eachCard)
+                        return False
+        return True
 
     
     def attack(self):
