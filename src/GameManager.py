@@ -39,7 +39,7 @@ class GameManager:
             # Draw characters
             mage_card_x = self.SCREEN_WIDTH // 2 - 250
             mage_card_y = self.SCREEN_HEIGHT - 50
-            self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.mage)             
+            self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.wizard)             
             self.wizard.animate(deck_position=(mage_card_x,mage_card_y))
             
             # Draw mage's cards at bottom right of screen

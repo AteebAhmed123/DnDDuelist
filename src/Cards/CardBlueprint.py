@@ -21,8 +21,7 @@ class CardBlueprint(Sprite):
     def render(self, position_to_draw=None):
         pass
 
-    def activate_card(self, target_position):
-        print('pass')
+    def activate_card(self, caster, target):
         pass
 
     def enable_card_played(self):
