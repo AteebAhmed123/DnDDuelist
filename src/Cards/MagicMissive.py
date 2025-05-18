@@ -1,22 +1,20 @@
 from Cards.CardBlueprint import CardBlueprint
 from SpriteUtil.SpriteUtil import SpriteUtil
-from Spells.Lightning import Lightning
-from Spells.Heal import Heal
+from Spells.MagicMissile import MagicMissile
 
-class DuelistParadox(CardBlueprint):
+class MagicMissive(CardBlueprint):
     # Define sprite coordinates for the card
     CARD_COORDS = (0, 0, 250, 350)  # Assuming the card takes up the full sprite
-    name = "Duelist's Paradox"
-    description = "Strikes the opponent with lightning, dealing 10 damage."
+    name = "Magic Missive"
+    description = "Launches a magic missile at the opponent, dealing 6 damage to them or 3 to you."
     damage = 10
     
 
     def __init__(self, screen):
         super().__init__(screen)
-        self.SPRITE_PATH = "./Assets/Cards/DuelistParadox.png"
+        self.SPRITE_PATH = "./Assets/Cards/MagicMCard.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
-        self.spell = Lightning(self.screen)
-        self.heal = Heal(self.screen)
+        self.spell = MagicMissile(self.screen)
         self.activated_card = False
 
     def get_sprite_coords(self):

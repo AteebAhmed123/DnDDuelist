@@ -1,8 +1,6 @@
 from Characters.Character import CharacterBlueprint
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Utils.HealthBar import HealthBar
-import pygame
-import os
 from Cards.Deck import Deck
 from Cards.Hands import Hand
 class Mage(CharacterBlueprint):
