@@ -49,14 +49,12 @@ class Lightning(SpellBase):
             self.lightning_sound.play()
             self.sound_played = True
         
-        print(f"Current frame: {self.current_frame}")
         frame_coords = self.animation_frames[self.current_frame]
         lightning_image = self.sprite.get_sprite(frame_coords)
         
         # Scale up the lightning image
         original_width = lightning_image.get_width()
         original_height = lightning_image.get_height()
-        print(f"Lightning image: {lightning_image}", target, original_width, original_height)
         new_width = int(original_width * self.scale_factor)
         new_height = int(original_height * self.scale_factor)
         lightning_image = pygame.transform.scale(lightning_image, (new_width, new_height))
@@ -79,7 +77,7 @@ class Lightning(SpellBase):
     def apply_affect(self, target):
         """Apply damage to the target"""
         target.health.reduce_health(10)
-        print(f"Lightning deals {self.damage} damage to target!") 
+        # print(f"Lightning deals {self.damage} damage to target!") 
 
     def set_spell_state(self, spell_state):
         """Set the spell active state"""

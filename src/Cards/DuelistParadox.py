@@ -2,6 +2,9 @@ from Cards.CardBlueprint import CardBlueprint
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.Lightning import Lightning
 from Spells.Heal import Heal
+from QuantumMechanics.QuantumStates import QuantumState
+from QuantumMechanics.Superposition import Superposition
+from qiskit import QuantumCircuit
 
 class DuelistParadox(CardBlueprint):
     # Define sprite coordinates for the card
@@ -18,16 +21,25 @@ class DuelistParadox(CardBlueprint):
         self.spell = Lightning(self.screen)
         self.heal = Heal(self.screen)
         self.activated_card = False
+        self.stateType = QuantumState.SUPERPOSITION
+        self.superposition = Superposition()
+        self.qubit = self.superposition.super_position_qubit(QuantumCircuit(1, 1))
+        self.collapsedState = None
+
 
     def get_sprite_coords(self):
         return self.CARD_COORDS
     
     def activate_card(self, caster, target):
-        print(caster, target)
-        return self.apply_affect(caster, target)
-
-
-    def apply_affect(self, caster, target):
-        return self.spell.animate_spell(caster, target)
+        if self.stateType == QuantumState.SUPERPOSITION:
+            self.collapsedState = self.superposition.collapse_qubit(self.qubit)
+            self.stateType = QuantumState.COLLAPSED
         
+        print(self.collapsedState, self.stateType)
+
+        if (self.collapsedState != None):
+            if (self.collapsedState == 0):
+                return self.spell.animate_spell(caster, target)
+            elif (self.collapsedState == 1):
+                return self.heal.animate_spell(caster, target)                
     
