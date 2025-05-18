@@ -4,6 +4,7 @@ from Utils.HealthBar import HealthBar
 import pygame
 import os
 from Cards.Deck import Deck
+from Cards.Hands import Hand
 
 class Wizard(CharacterBlueprint):
 
@@ -41,7 +42,10 @@ class Wizard(CharacterBlueprint):
         self.health = HealthBar(100, screen)
         self.screen = screen
         self.position_to_draw = position_to_draw
-        
+        self.deck = Deck(screen)
+        self.hand = Hand(screen, self.deck)
+        self.card_played = []
+
         # Initialize the wizard's deck
         # self.deck = Deck(screen)
         # self.hand = Hand(screen, self.deck)
@@ -66,21 +70,41 @@ class Wizard(CharacterBlueprint):
         self.animation_tracker = self.animation_tracker + 1
         self.screen.blit(pygame.transform.flip(sprite_standing_image, True, False), sprite_standing_image_position)
 
-    def animate(self, deck_position):
+    def animate(self, deck_position, target):
         self.motion_animation()
         self.health.animate((self.position_to_draw[0], 
                              self.position_to_draw[1] - self.health_bar_display_offset))
         # self.render_deck(deck_position[0], deck_position[1])
+        # self.hand.render(deck_position[0], deck_position[1])
+        # if (self.card_played != []):
+        #     for eachCard in self.card_played:
+        #         playing_card = eachCard.activate_card(self, target)
+        #         if (playing_card == False):
+        #             self.card_played.remove(eachCard)
 
     
     def attack(self):
         self.current_state = 1
         self.animation_tracker = 0
-        
+
+
+    def handle_card_click(self, mouse_pos):
+        """Handle clicks on cards in the mage's hand"""
+        card_index = self.hand.handle_click(mouse_pos)
+        if card_index >= 0 and card_index < len(self.hand.cards_in_hand):
+            self.card_played.append(self.hand.cards_in_hand[card_index])
+            self.hand.remove_card(card_index)
+            if (len(self.deck.cards_in_deck) > 0):
+                self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
+
     def render_deck(self, center_x, y_position):
-        """Render the wizard's deck at the specified position"""
+        """Render the mage's deck at the specified position"""
         self.deck.render(center_x, y_position)
-        
+
+
+    def play_card(self, card):
+        pass
+
     # def draw_new_hand(self):
     #     """Draw a new hand from the deck"""
     #     self.deck.draw_hand()
