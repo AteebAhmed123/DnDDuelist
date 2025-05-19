@@ -17,7 +17,7 @@ class TurnIndicator:
         # Animation properties
         self.is_active = False
         self.animation_progress = 0.0
-        self.animation_speed = 0.05  # Speed of transition animation
+        self.animation_speed = 0.20  # Speed of transition animation
         self.max_alpha = 180  # Maximum transparency (0-255)
         
         # Text properties

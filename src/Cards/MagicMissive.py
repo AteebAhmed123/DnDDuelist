@@ -1,6 +1,10 @@
 from Cards.CardBlueprint import CardBlueprint
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.MagicMissile import MagicMissile
+from Spells.MagicMissileV2 import MagicMissileV2
+from QuantumMechanics.QuantumStates import QuantumState
+from QuantumMechanics.Superposition import Superposition
+from qiskit import QuantumCircuit
 
 class MagicMissive(CardBlueprint):
     # Define sprite coordinates for the card
@@ -14,16 +18,29 @@ class MagicMissive(CardBlueprint):
         super().__init__(screen)
         self.SPRITE_PATH = "./Assets/Cards/MagicMCard.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
-        self.spell = MagicMissile(self.screen)
+        self.superposition = Superposition()
+        self.qubit = self.superposition.super_position_qubit(QuantumCircuit(1, 1))
+        self.stateType = QuantumState.SUPERPOSITION
+        self.collapsedState = None
+        self.magicMissile = MagicMissile(self.screen)
+        self.self_harm_magic_missile = MagicMissileV2(self.screen)
         self.activated_card = False
 
     def get_sprite_coords(self):
         return self.CARD_COORDS
     
     def activate_card(self, caster, target):
-        print(caster, target)
-        return self.apply_affect(caster, target)
+        if self.stateType == QuantumState.SUPERPOSITION:
+            self.collapsedState = self.superposition.collapse_qubit(self.qubit)
+            self.stateType = QuantumState.COLLAPSED
+        
+        print(self.collapsedState, self.stateType)
 
+        if (self.collapsedState != None):
+            if (self.collapsedState == 0):
+                return self.magicMissile.animate_spell(caster, target)
+            elif (self.collapsedState == 1):
+                return self.self_harm_magic_missile.animate_spell(caster, target)   
 
     def apply_affect(self, caster, target):
         return self.spell.animate_spell(caster, target)

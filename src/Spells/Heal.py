@@ -78,7 +78,7 @@ class Heal(SpellBase):
     def apply_affect(self, target):
         print(target)
         """Apply damage to the target"""
-        target.health.increase_health(10)
+        target.health.increase_health(3)
         print(f"Lightning deals {self.damage} damage to target!") 
 
     def set_spell_state(self, spell_state):
