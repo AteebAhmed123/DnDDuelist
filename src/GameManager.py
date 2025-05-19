@@ -6,6 +6,8 @@ from Utils.HealthBar import HealthBar
 from pygame.sprite import LayeredUpdates
 import random
 from TurnIndicator import TurnIndicator
+from Effects.DamageIndicator import DamageIndicator
+from Effects.DamageFlash import DamageFlash
 
 class GameManager:
     def __init__(self):
@@ -17,12 +19,22 @@ class GameManager:
         self.SCREEN_HEIGHT = 600
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         
+        # Initialize effects
+        self.turn_indicator = TurnIndicator(self.screen)
+        self.damage_indicator = DamageIndicator(self.screen)
+        self.damage_flash = DamageFlash()
+        
         # Initialize characters
         self.mage = Mage(self.screen, (650,280))
         self.wizard = Wizard(self.screen, (150,280))
         
-        # Initialize turn indicator
-        self.turn_indicator = TurnIndicator(self.screen)
+        # Set damage indicators for health bars
+        self.mage.health.set_damage_indicator(self.damage_indicator)
+        self.wizard.health.set_damage_indicator(self.damage_indicator)
+        
+        # Set damage flash effect
+        self.mage.set_damage_flash(self.damage_flash)
+        self.wizard.set_damage_flash(self.damage_flash)
         
         # Turn counter
         self.turn_counter = 1
@@ -52,6 +64,10 @@ class GameManager:
             
             # Draw background
             self.screen.blit(game_assets, (0, 0))
+            
+            # Update effects
+            self.damage_indicator.update()
+            self.damage_flash.update()
             
             # Draw turn counter
             font = pygame.font.SysFont('Arial', 24)
@@ -83,6 +99,9 @@ class GameManager:
                 turn_changed = True
                 self.turn_counter += 1  # Increment turn counter after full round
                 self.turn_indicator.start_transition("Mage")
+            
+            # Render damage indicators (after characters but before turn indicator)
+            self.damage_indicator.render()
             
             # Update and render turn indicator
             self.turn_indicator.update()

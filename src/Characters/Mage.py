@@ -3,6 +3,7 @@ from SpriteUtil.SpriteUtil import SpriteUtil
 from Utils.HealthBar import HealthBar
 from Cards.Deck import Deck
 from Cards.Hands import Hand
+
 class Mage(CharacterBlueprint):
 
     standing_sprite_coords = [
@@ -40,6 +41,7 @@ class Mage(CharacterBlueprint):
         self.current_state = 0
         self.animation_tracker = 0
         self.health = HealthBar(100, screen)
+        self.health.character = self  # Set reference to character
         self.screen = screen
         self.position_to_draw = position_to_draw
         
@@ -47,6 +49,10 @@ class Mage(CharacterBlueprint):
         self.deck = Deck(screen)
         self.hand = Hand(screen, self.deck)
         self.card_played = []
+        
+        # Damage flash effect
+        self.damage_flash = None
+        self.character_id = "mage"  # Unique ID for this character
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -60,6 +66,12 @@ class Mage(CharacterBlueprint):
 
         animation_to_render = sprite_image[self.animation_tracker]
         sprite_standing_image = self.sprite.get_sprite(animation_to_render)
+        
+        # Apply damage flash effect if active
+        if self.damage_flash:
+            sprite_standing_image = self.damage_flash.apply_flash(
+                self.character_id, sprite_standing_image)
+        
         sprite_standing_image_position = self.sprite.draw_sprite_image_at(
             sprite_standing_image, 
             self.position_to_draw)  
@@ -101,6 +113,15 @@ class Mage(CharacterBlueprint):
 
     def play_card(self, card):
         pass
+
+    def set_damage_flash(self, damage_flash):
+        """Set the damage flash effect for this character"""
+        self.damage_flash = damage_flash
+    
+    def trigger_damage_flash(self):
+        """Trigger the damage flash effect"""
+        if self.damage_flash:
+            self.damage_flash.start_flash(self.character_id)
 
     # def handle_card_click(self, mouse_pos):
     #     """Handle clicks on cards in the mage's hand"""

@@ -40,16 +40,16 @@ class Wizard(CharacterBlueprint):
         self.current_state = 0
         self.animation_tracker = 0
         self.health = HealthBar(100, screen)
+        self.health.character = self  # Set reference to character
         self.screen = screen
         self.position_to_draw = position_to_draw
         self.deck = Deck(screen)
         self.hand = Hand(screen, self.deck)
         self.card_played = []
-
-        # Initialize the wizard's deck
-        # self.deck = Deck(screen)
-        # self.hand = Hand(screen, self.deck)
-        # self.deck.draw_hand()
+        
+        # Damage flash effect
+        self.damage_flash = None
+        self.character_id = "wizard"  # Unique ID for this character
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -63,6 +63,12 @@ class Wizard(CharacterBlueprint):
 
         animation_to_render = sprite_image[self.animation_tracker]
         sprite_standing_image = self.sprite.get_sprite(animation_to_render)
+        
+        # Apply damage flash effect if active
+        if self.damage_flash:
+            sprite_standing_image = self.damage_flash.apply_flash(
+                self.character_id, sprite_standing_image)
+                
         sprite_standing_image_position = self.sprite.draw_sprite_image_at(
             sprite_standing_image, 
             self.position_to_draw)  
@@ -85,11 +91,18 @@ class Wizard(CharacterBlueprint):
                         return False
         return True
 
+    def set_damage_flash(self, damage_flash):
+        """Set the damage flash effect for this character"""
+        self.damage_flash = damage_flash
+    
+    def trigger_damage_flash(self):
+        """Trigger the damage flash effect"""
+        if self.damage_flash:
+            self.damage_flash.start_flash(self.character_id)
     
     def attack(self):
         self.current_state = 1
         self.animation_tracker = 0
-
 
     def handle_card_click(self, mouse_pos):
         """Handle clicks on cards in the mage's hand"""
@@ -103,7 +116,6 @@ class Wizard(CharacterBlueprint):
     def render_deck(self, center_x, y_position):
         """Render the mage's deck at the specified position"""
         self.deck.render(center_x, y_position)
-
 
     def play_card(self, card):
         pass
