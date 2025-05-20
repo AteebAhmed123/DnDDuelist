@@ -4,6 +4,8 @@ from Cards.ReflectOrGain import ReflectOrGain
 from Cards.MagicMissive import MagicMissive
 from SpriteUtil.SpriteUtil import SpriteUtil
 import random
+import pygame
+
 class Deck:
 
     POSSIBLE_CARDS = [
@@ -51,6 +53,23 @@ class Deck:
         deck_x = self.screen.get_width() - 180  # 20px margin from right edge
         deck_y = self.screen.get_height() - 230  # 20px margin from bottom edge
         self.screen.blit(deck_image, (deck_x, deck_y))
+        
+        # Display card count on top of the deck
+        card_count = len(self.cards_in_deck)
+        font = pygame.font.SysFont('Arial', 18, bold=True)
+        count_text = font.render(f"{card_count}", True, (255, 255, 255))
+        
+        # Create a small background for the text
+        text_bg = pygame.Surface((count_text.get_width() + 10, count_text.get_height() + 6), pygame.SRCALPHA)
+        text_bg.fill((0, 0, 0, 180))  # Semi-transparent black
+        
+        # Position the count in the top-right corner of the deck
+        count_x = deck_x + deck_image.get_width() - count_text.get_width() - 15
+        count_y = deck_y + 10
+        
+        # Draw background and text
+        self.screen.blit(text_bg, (count_x - 5, count_y - 3))
+        self.screen.blit(count_text, (count_x, count_y))
         
         # self.hand.render(center_x, y_position)
     

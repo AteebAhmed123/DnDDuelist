@@ -5,6 +5,7 @@ from Spells.MagicMissileV2 import MagicMissileV2
 from QuantumMechanics.QuantumStates import QuantumState
 from QuantumMechanics.Superposition import Superposition
 from qiskit import QuantumCircuit
+from Spells.ThanosSnap import ThanosSnap
 
 class MagicMissive(CardBlueprint):
     # Define sprite coordinates for the card
@@ -22,7 +23,7 @@ class MagicMissive(CardBlueprint):
         self.qubit = self.superposition.super_position_qubit(QuantumCircuit(1, 1))
         self.stateType = QuantumState.SUPERPOSITION
         self.collapsedState = None
-        self.magicMissile = MagicMissile(self.screen)
+        self.magicMissile = ThanosSnap(self.screen)
         self.self_harm_magic_missile = MagicMissileV2(self.screen)
         self.activated_card = False
 
