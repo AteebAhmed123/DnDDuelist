@@ -26,7 +26,6 @@ class Superposition:
         if '1' in counts:
             collapsedState['1'] = counts['1']
         
-        print(collapsedState)
         if collapsedState['0'] > collapsedState['1']:
             return 0
         else:

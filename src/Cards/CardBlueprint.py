@@ -49,9 +49,7 @@ class CardBlueprint(Sprite):
         
     def is_clicked(self, mouse_pos):
         """Check if the card was clicked"""
-        print(f"Mouse: {mouse_pos}, Card rect: {self.rect}")
         if self.rect:
             result = self.rect.collidepoint(mouse_pos)
-            print(f"Mouse: {mouse_pos}, Card rect: {self.rect}, Result: {result}")
             return result
         return False 

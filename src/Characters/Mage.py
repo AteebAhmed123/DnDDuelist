@@ -52,7 +52,7 @@ class Mage(CharacterBlueprint):
         
         # Damage flash effect
         self.damage_flash = None
-        self.character_id = "mage"  # Unique ID for this character
+        self.character_id = "Mage"  # Unique ID for this character
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]

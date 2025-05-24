@@ -15,15 +15,13 @@ class ThanosSnap(SpellBase):
         # (426, 144, 72, 77),    # Frame 1
         # (1505, 144, 72, 77),    # Frame 1
         # (1581, 144, 72, 77),    # Frame 1
-        (1671, 144, 72, 77),    # Frame 1
-        (1749, 144, 72, 77),    # Frame 1
-        (1505, 144, 72, 77),    # Frame 1
-        (3162, 144, 72, 77),    # Frame 1
-        (3242, 144, 72, 77),    # Frame 1
-        (3332, 144, 72, 77),    # Frame 1
-        (3411, 144, 72, 77),    # Frame 1
-        (3489, 144, 72, 77),    # Frame 1
-        (3569, 144, 72, 77)    # Frame 1
+        (18, 148, 58, 72),    # Frame 1
+        (599, 147, 58, 72),    # Frame 1
+        (1595, 148, 58, 72),    # Frame 1
+        (1920, 144, 58, 72),    # Frame 1
+        (2329, 144, 58, 77),    # Frame 1
+        (2912, 144, 58, 77),    # Frame 1
+        (3576, 144, 58, 77)
     ]
     
     def __init__(self, screen):
@@ -80,9 +78,10 @@ class ThanosSnap(SpellBase):
         frame_index = int(self.current_frame) % len(self.animation_frames)
         
         # Draw the snap effect near caster's hand
-        snap_pos = (caster.position_to_draw[0] + 50, caster.position_to_draw[1] + 20)
+        position_to_draw = (self.screen.get_width() / 2, self.screen.get_height() / 2)
+        snap_pos = (position_to_draw[0] - 120, position_to_draw[1] - 170)
         snap_sprite = self.sprite.get_sprite(self.animation_frames[frame_index])
-        snap_sprite = pygame.transform.scale(snap_sprite, (100, 100))
+        snap_sprite = pygame.transform.scale(snap_sprite, (200, 200))
         self.screen.blit(snap_sprite, snap_pos)
         
         # Update and draw particles
@@ -111,24 +110,24 @@ class ThanosSnap(SpellBase):
                 card_positions.append(card_center)
                 
                 # Create particles for this card
-                self._create_particles_at_position(card_center, 30)  # 30 particles per card
+                self._create_particles_at_position(target.position_to_draw, 80)  # 30 particles per card
         
         # Add some particles around the deck
         deck_pos = (target.position_to_draw[0] - 100, target.position_to_draw[1] + 100)
-        self._create_particles_at_position(deck_pos, 50)  # 50 particles for the deck
+        # self._create_particles_at_position(deck_pos, 50)  # 50 particles for the deck
     
     def _create_particles_at_position(self, position, count):
         """Create particles at the specified position"""
         for _ in range(count):
             # Random offset from center
-            offset_x = random.randint(-30, 30)
-            offset_y = random.randint(-30, 30)
+            offset_x = random.randint(-60, 60)
+            offset_y = random.randint(-320, 200)
             
             # Create particle
             particle = {
                 'x': position[0] + offset_x,
                 'y': position[1] + offset_y,
-                'size': random.randint(2, 6),
+                'size': random.randint(15, 15),
                 'color': random.choice(self.particle_colors),
                 'speed_x': random.uniform(-1.5, 1.5),
                 'speed_y': random.uniform(-1.5, 1.5),

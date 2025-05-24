@@ -53,7 +53,7 @@ class GameManager:
         wizard_turn = True
         
         # Show initial turn indicator
-        current_player = "Wizard" if wizard_turn else "Mage"
+        current_player = self.wizard if wizard_turn else self.mage
         self.turn_indicator.start_transition(current_player)
         
         while running:
@@ -92,13 +92,13 @@ class GameManager:
                 mage_turn = False
                 wizard_turn = True
                 turn_changed = True
-                self.turn_indicator.start_transition("Wizard")
+                self.turn_indicator.start_transition(self.wizard)
             elif wizard_turn_result == False:
                 mage_turn = True
                 wizard_turn = False
                 turn_changed = True
                 self.turn_counter += 1  # Increment turn counter after full round
-                self.turn_indicator.start_transition("Mage")
+                self.turn_indicator.start_transition(self.mage)
             
             # Render damage indicators (after characters but before turn indicator)
             self.damage_indicator.render()
@@ -108,7 +108,7 @@ class GameManager:
             self.turn_indicator.render()
             
             pygame.display.flip()
-            clock.tick(10)
+            clock.tick(20)
         pygame.quit()
         sys.exit()
 

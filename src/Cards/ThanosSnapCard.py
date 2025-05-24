@@ -7,24 +7,23 @@ from QuantumMechanics.Superposition import Superposition
 from qiskit import QuantumCircuit
 from Spells.ThanosSnap import ThanosSnap
 
-class MagicMissive(CardBlueprint):
+class ThanosSnapCard(CardBlueprint):
     # Define sprite coordinates for the card
     CARD_COORDS = (0, 0, 250, 350)  # Assuming the card takes up the full sprite
-    name = "Magic Missive"
-    description = "Launches a magic missile at the opponent, dealing 6 damage to them or 3 to you."
+    name = "Thanos Snap"
+    description = "Half the number of cards in your deck or half the number of cards in your opponent's deck."
     damage = 10
     
 
     def __init__(self, screen):
         super().__init__(screen)
-        self.SPRITE_PATH = "./Assets/Cards/MagicMCard.png"
+        self.SPRITE_PATH = "./Assets/Cards/ThanosSnap.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.superposition = Superposition()
         self.qubit = self.superposition.super_position_qubit(QuantumCircuit(1, 1))
         self.stateType = QuantumState.SUPERPOSITION
         self.collapsedState = None
-        self.magicMissile = MagicMissile(self.screen)
-        self.self_harm_magic_missile = MagicMissileV2(self.screen)
+        self.thanosSnap = ThanosSnap(self.screen)
         self.activated_card = False
 
     def get_sprite_coords(self):
@@ -35,13 +34,11 @@ class MagicMissive(CardBlueprint):
             self.collapsedState = self.superposition.collapse_qubit(self.qubit)
             self.stateType = QuantumState.COLLAPSED
         
-        print(self.collapsedState, self.stateType)
-
         if (self.collapsedState != None):
             if (self.collapsedState == 0):
-                return self.magicMissile.animate_spell(caster, target)
+                return self.thanosSnap.animate_spell(caster, caster)
             elif (self.collapsedState == 1):
-                return self.self_harm_magic_missile.animate_spell(caster, target)   
+                return self.thanosSnap.animate_spell(caster, target)
 
     def apply_affect(self, caster, target):
         return self.spell.animate_spell(caster, target)

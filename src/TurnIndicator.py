@@ -1,9 +1,20 @@
 import pygame
 import math
+from SpriteUtil.SpriteUtil import SpriteUtil
 
 class TurnIndicator:
     """Visual indicator for turn transitions"""
-    
+
+    animation_frames = [
+        (41, 64, 220, 196),
+        (41, 364, 220, 196),
+        (41, 664, 220, 196),
+        (41, 964, 220, 196),
+        (41, 1264, 220, 196),
+        (41, 64, 220, 196)
+    ]
+
+
     def __init__(self, screen):
         """Initialize the turn indicator
         
@@ -26,8 +37,13 @@ class TurnIndicator:
         
         # Create surfaces
         self.overlay = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        self.SPRITE_PATH = "./Assets/turn_indicator.png"
+        self.sprite = SpriteUtil(self.SPRITE_PATH)
+        self.current_state = 0
+        self.animation_tracker = 0
         
-    def start_transition(self, next_player_name):
+        
+    def start_transition(self, next_player):
         """Start the turn transition animation
         
         Args:
@@ -35,7 +51,8 @@ class TurnIndicator:
         """
         self.is_active = True
         self.animation_progress = 0.0
-        self.next_player = next_player_name
+        print("turn_indicato", next_player)
+        self.next_player = next_player
         
     def update(self):
         """Update the animation state
@@ -57,7 +74,13 @@ class TurnIndicator:
         return True
         
     def render(self):
+
         """Render the turn transition effect"""
+        if self.next_player.character_id == "Wizard":
+            self.render_turn_indicator(self.next_player.position_to_draw)
+        else:
+            self.render_turn_indicator(self.next_player.position_to_draw)
+
         if not self.is_active:
             return
             
@@ -74,7 +97,7 @@ class TurnIndicator:
         self.overlay.fill((0, 0, 0, alpha))
         
         # Render turn text
-        turn_text = f"{self.next_player}'s Turn"
+        turn_text = f"{self.next_player.character_id}'s Turn"
         
         # Create text surfaces
         turn_surface = self.font_large.render(turn_text, True, (255, 255, 255))
@@ -92,3 +115,22 @@ class TurnIndicator:
         
         # Draw overlay on screen
         self.screen.blit(self.overlay, (0, 0)) 
+
+    def render_turn_indicator(self, turn_indicator_position):
+        """Render the turn indicator"""
+        turn_indicator_position = (turn_indicator_position[0], turn_indicator_position[1] - 100)
+        if self.animation_tracker > len(self.animation_frames)-1:
+            self.animation_tracker = 0
+
+        animation_to_render = self.animation_frames[self.animation_tracker]
+        sprite_standing_image = self.sprite.get_sprite(animation_to_render)
+
+        
+        scaled_sprite_image = pygame.transform.scale(sprite_standing_image, (50, 50))
+        sprite_standing_image_position = self.sprite.draw_sprite_image_at(
+            scaled_sprite_image, 
+            turn_indicator_position)  
+
+        self.animation_tracker = self.animation_tracker + 1
+
+        self.screen.blit(scaled_sprite_image, sprite_standing_image_position)

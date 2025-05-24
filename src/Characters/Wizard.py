@@ -49,7 +49,7 @@ class Wizard(CharacterBlueprint):
         
         # Damage flash effect
         self.damage_flash = None
-        self.character_id = "wizard"  # Unique ID for this character
+        self.character_id = "Wizard"  # Unique ID for this character
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]

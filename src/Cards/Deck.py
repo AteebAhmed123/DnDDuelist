@@ -2,6 +2,7 @@ from Cards.DuelistParadox import DuelistParadox
 from Cards.BlastAllVsBlastMe import BlastAllVsBlastMe
 from Cards.ReflectOrGain import ReflectOrGain
 from Cards.MagicMissive import MagicMissive
+from Cards.ThanosSnapCard import ThanosSnapCard
 from SpriteUtil.SpriteUtil import SpriteUtil
 import random
 import pygame
@@ -12,7 +13,8 @@ class Deck:
         DuelistParadox,
         ReflectOrGain,
         BlastAllVsBlastMe,
-        MagicMissive
+        MagicMissive, 
+        ThanosSnapCard
     ]
     
     def __init__(self, screen):

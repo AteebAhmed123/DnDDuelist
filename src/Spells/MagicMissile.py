@@ -80,7 +80,7 @@ class MagicMissile(SpellBase):
                     'target_x': target_x,
                     'target_y': target_y,
                     'progress': 0.0,
-                    'speed': self.missile_speed * (1.4 + random.random() * 0.4),  # Vary speed slightly
+                    'speed': self.missile_speed * (1.0 + random.random() * 0.4),  # Vary speed slightly
                     'frame': random.randint(0, len(self.animation_frames) - 1),
                     'hit': False
                 }
