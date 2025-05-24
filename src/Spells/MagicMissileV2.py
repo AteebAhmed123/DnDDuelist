@@ -187,5 +187,7 @@ class MagicMissileV2(SpellBase):
         
     def apply_affect(self, target):
         """Apply damage to the target (caster)"""
-        target.health.reduce_health(self.damage)
-        print(f"Magic Missile backfires and deals {self.damage} damage to caster!") 
+        if target.shield == False:
+            target.health.reduce_health(self.damage * target.self_damage_multiplier)
+        target.shield = False
+        target.self_damage_multiplier = 1.0

@@ -25,6 +25,5 @@ class SpriteUtil:
             image.blit(self.sprite_sheet, (0, 0), rect)        
             return image
         except Exception as e:
-            print(f"Error creating image: {e}")
             return None
     

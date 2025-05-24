@@ -3,31 +3,25 @@ from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 import time
 
-class Heal(SpellBase):
+class Barrier(SpellBase):
     """Lightning spell that strikes a target"""
     
     # Define animation frames as class variable
     animation_frames = [
-        (34, 144, 58, 76),    # Frame 1
-        (34, 274, 54, 76),   # Frame 2
-        (34, 404, 54, 76),   # Frame 2
-        (164, 24, 58, 76),   # Frame 2
-        (164, 144, 58, 76),   # Frame 2
-        (164, 274, 58, 76),   # Frame 2
-        (164, 404, 58, 76),   # Frame 2
-        (295, 24, 58, 76),   # Frame 2
-        (295, 154, 58, 76),   # Frame 2
-        (295, 274, 58, 76),   # Frame 2
-        (295, 414, 58, 76),   # Frame 2
-        (415, 34, 58, 76),   # Frame 2
-        (415, 164, 58, 76),   # Frame 2
-        (415, 294, 58, 76)   # Frame 2
+        (1586, 238, 181, 75),    # Frame 1
+        (1955, 59, 402, 406),    # Frame 1
+        (1955, 59, 402, 406),    # Frame 1
+        (47, 530, 402, 406),    # Frame 1
+        (517, 530, 402, 406),    # Frame 1
+        (997, 530, 402, 406),    # Frame 1
+        (1477, 530, 402, 406),    # Frame 1
+        (996, 1010, 402, 406)    # Frame 1
     ]
     
     def __init__(self, screen):
         """Initialize the lightning effect"""
         super().__init__(screen)
-        self.SPRITE_PATH = "./Assets/Cards/HealEffect.png"
+        self.SPRITE_PATH = "./Assets/Cards/Shield.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.animation_speed = 0.1  # Seconds between frames
         self.damage = 10  # Damage dealt by the lightning
@@ -36,7 +30,7 @@ class Heal(SpellBase):
         
         # Load the lightning sound effect
         self.sound_played = False
-        self.heal_sound = pygame.mixer.Sound("./Assets/Sounds/heal.mp3")
+        self.heal_sound = pygame.mixer.Sound("./Assets/Sounds/energyshieldsound.mp3")
         
     def animate_spell(self, caster, target):
         """Animate the lightning spell with frame delays"""
@@ -51,31 +45,49 @@ class Heal(SpellBase):
             self.sound_played = True
         
         frame_coords = self.animation_frames[self.current_frame]
-        heal_image = self.sprite.get_sprite(frame_coords)
-        
-        # Scale up the lightning image
-        original_width = heal_image.get_width()
-        original_height = heal_image.get_height()
-        new_width = int(original_width * self.scale_factor)
-        new_height = int(original_height * self.scale_factor)
-        heal_image = pygame.transform.scale(heal_image, (new_width, new_height))
+        shield_image = self.sprite.get_sprite(frame_coords)
+        shield_image = pygame.transform.scale(shield_image, (130, 130))
 
         position = (caster.position_to_draw[0], 
                     caster.position_to_draw[1])
  
         sprite_standing_image_position = self.sprite.draw_sprite_image_at(
-            heal_image, 
+            shield_image, 
             position)  
          
         # Draw the lightning
-        self.screen.blit(heal_image, sprite_standing_image_position)
+        self.screen.blit(shield_image, sprite_standing_image_position)
         self.current_frame = self.current_frame + 1
         return True
-        
-        
+    
+
     def apply_affect(self, target):
-        target.health.increase_health(3)
+        target.shield = True
 
     def set_spell_state(self, spell_state):
         """Set the spell active state"""
         self.spell_active = spell_state
+
+
+class StaticBarrierShield:
+
+    @staticmethod
+    def render_static_shield(screen, caster):
+        SPRITE_PATH = "./Assets/Cards/Shield.png"
+        sprite = SpriteUtil(SPRITE_PATH)
+
+        shield_image = sprite.get_sprite((996, 1010, 402, 406))
+        
+        original_width = shield_image.get_width()
+        original_height = shield_image.get_height()
+        shield_image = pygame.transform.scale(shield_image, (130, 130))
+
+        position = (caster.position_to_draw[0], 
+                    caster.position_to_draw[1])
+ 
+        sprite_standing_image_position = sprite.draw_sprite_image_at(
+            shield_image, 
+            position)  
+         
+        # Draw the lightning
+        screen.blit(shield_image, sprite_standing_image_position)

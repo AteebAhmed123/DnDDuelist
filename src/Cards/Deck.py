@@ -3,19 +3,19 @@ from Cards.BlastAllVsBlastMe import BlastAllVsBlastMe
 from Cards.ReflectOrGain import ReflectOrGain
 from Cards.MagicMissive import MagicMissive
 from Cards.ThanosSnapCard import ThanosSnapCard
+from Cards.CollapseBarrier import CollapseBarrier
 from SpriteUtil.SpriteUtil import SpriteUtil
 import random
 import pygame
 
 class Deck:
 
-    POSSIBLE_CARDS = [
-        DuelistParadox,
-        ReflectOrGain,
-        BlastAllVsBlastMe,
-        MagicMissive, 
-        ThanosSnapCard
-    ]
+    POSSIBLE_CARDS = {
+        DuelistParadox: 0.3,
+        MagicMissive: 0.3, 
+        ThanosSnapCard: 0.1,
+        CollapseBarrier: 0.3
+    }
     
     def __init__(self, screen):
         """Initialize a deck with up to 20 cards"""
@@ -36,7 +36,9 @@ class Deck:
         """Add some default cards to the deck"""
         # Add 3 copies of each card type for a total of 9 cards
         for _ in range(0, self.max_cards):
-            card_class = random.choice(self.POSSIBLE_CARDS)
+            all_cards = list(self.POSSIBLE_CARDS.keys())
+            weights = list(self.POSSIBLE_CARDS.values())
+            card_class = random.choice(random.choices(all_cards, weights=weights, k=1))
             self.add_card(card_class(self.screen))
 
     def add_card(self, card):
@@ -81,12 +83,3 @@ class Deck:
         for _ in range(number_of_cards):
             cards_drawn.append(self.cards_in_deck.pop(0))
         return cards_drawn
-
-        
-    # def draw_hand(self):
-    #     """Draw the first 5 cards from the deck to the hand"""
-    #     self.hand.clear()
-    #     cards_to_draw = 4
-        
-    #     for i in range(cards_to_draw):
-    #         self.hand.add_card(self.cards[i])

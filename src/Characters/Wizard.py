@@ -5,6 +5,8 @@ import pygame
 import os
 from Cards.Deck import Deck
 from Cards.Hands import Hand
+from Spells.Barrier import StaticBarrierShield
+from Spells.BacklashSurge import StaticVulnerabilityEffect
 
 class Wizard(CharacterBlueprint):
 
@@ -39,14 +41,16 @@ class Wizard(CharacterBlueprint):
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.current_state = 0
         self.animation_tracker = 0
-        self.health = HealthBar(100, screen)
+        self.health = HealthBar(20, 20, screen)
         self.health.character = self  # Set reference to character
         self.screen = screen
         self.position_to_draw = position_to_draw
         self.deck = Deck(screen)
         self.hand = Hand(screen, self.deck)
         self.card_played = []
-        
+        self.shield = False
+        self.self_damage_multiplier = 1.0
+
         # Damage flash effect
         self.damage_flash = None
         self.character_id = "Wizard"  # Unique ID for this character
@@ -55,6 +59,8 @@ class Wizard(CharacterBlueprint):
         return self.sprite_states[self.current_state]
 
     def motion_animation(self):
+        self.render_shield()
+        self.render_vulnerable()
         sprite_image = self.sprite_states[self.current_state]
 
         if self.animation_tracker > len(sprite_image)-1:
@@ -106,6 +112,8 @@ class Wizard(CharacterBlueprint):
 
     def handle_card_click(self, mouse_pos):
         """Handle clicks on cards in the mage's hand"""
+        self.current_state = 1
+        self.animation_tracker = 0
         card_index = self.hand.handle_click(mouse_pos)
         if card_index >= 0 and card_index < len(self.hand.cards_in_hand):
             self.card_played.append(self.hand.cards_in_hand[card_index])
@@ -117,9 +125,16 @@ class Wizard(CharacterBlueprint):
         """Render the mage's deck at the specified position"""
         self.deck.render(center_x, y_position)
 
-    def play_card(self, card):
-        pass
+    def render_shield(self):
+        """Render the shield for this character"""
+        if self.shield:
+            StaticBarrierShield.render_static_shield(self.screen, self)
 
+    def render_vulnerable(self):
+        """Render the vulnerable for this character"""
+        if self.self_damage_multiplier > 1.0:
+            print("self.self_damage_multiplier Wizard", self.self_damage_multiplier)
+            StaticVulnerabilityEffect.render_static_vulnerable(self.screen, self)
     # def draw_new_hand(self):
     #     """Draw a new hand from the deck"""
     #     self.deck.draw_hand()

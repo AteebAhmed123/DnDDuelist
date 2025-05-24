@@ -35,8 +35,6 @@ class DuelistParadox(CardBlueprint):
             self.collapsedState = self.superposition.collapse_qubit(self.qubit)
             self.stateType = QuantumState.COLLAPSED
         
-        print(self.collapsedState, self.stateType)
-
         if (self.collapsedState != None):
             if (self.collapsedState == 0):
                 return self.spell.animate_spell(caster, target)

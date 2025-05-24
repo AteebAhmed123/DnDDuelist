@@ -14,10 +14,11 @@ class HealthBar(SpriteUtil):
 
     SPRITE_HEALTH_BACKGROUND_PATH = "./Assets/Health/health.png"
 
-    def __init__(self, health, screen):
+    def __init__(self, health, max_health, screen):
         self.sprite_health_background = SpriteUtil(self.SPRITE_HEALTH_BACKGROUND_PATH) 
         self.screen = screen
         self.health = health
+        self.max_health = max_health
         self.animated_health_background = False
         self.last_health = health  # Track previous health value
         self.damage_indicator = None  # Will be set by GameManager
@@ -29,7 +30,6 @@ class HealthBar(SpriteUtil):
 
     def reduce_health(self, amount):
         """Reduce health and show damage indicator"""
-        old_health = self.health
         self.health -= amount
         if self.health < 0:
             self.health = 0
@@ -46,14 +46,13 @@ class HealthBar(SpriteUtil):
             if hasattr(self, 'character') and hasattr(self.character, 'trigger_damage_flash'):
                 self.character.trigger_damage_flash()
             
-        return old_health - self.health  # Return actual damage dealt
+        return self.health  # Return actual damage dealt
 
     def increase_health(self, amount):
         """Increase health and show healing indicator"""
-        old_health = self.health
         self.health += amount
-        if self.health > 100:
-            self.health = 100
+        if self.health > self.max_health:
+            self.health = self.max_health
             
         # Show healing indicator if available
         if self.damage_indicator and amount > 0:
@@ -63,7 +62,7 @@ class HealthBar(SpriteUtil):
                 is_heal=True
             )
             
-        return self.health - old_health  # Return actual healing done
+        return self.health  # Return actual healing done
     
     def animate_health_background(self, position_to_draw = None):
         if self.animated_health_background:

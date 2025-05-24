@@ -25,7 +25,7 @@ class Lightning(SpellBase):
         self.SPRITE_PATH = "./Assets/Cards/lightning.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.animation_speed = 0.1  # Seconds between frames
-        self.damage = 10  # Damage dealt by the lightning
+        self.damage = 5  # Damage dealt by the lightning
         self.scale_factor = 5  # Scale the lightning to be twice as large
         self.spell_active = False
         
@@ -76,8 +76,10 @@ class Lightning(SpellBase):
         
     def apply_affect(self, target):
         """Apply damage to the target"""
-        target.health.reduce_health(5)
-        # print(f"Lightning deals {self.damage} damage to target!") 
+        if target.shield == False:
+            target.health.reduce_health(self.damage * target.self_damage_multiplier)
+        target.shield = False
+        target.self_damage_multiplier = 1.0
 
     def set_spell_state(self, spell_state):
         """Set the spell active state"""

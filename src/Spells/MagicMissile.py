@@ -158,8 +158,10 @@ class MagicMissile(SpellBase):
         
     def apply_affect(self, target):
         """Apply damage to the target"""
-        target.health.reduce_health(self.damage)
-        print(f"Magic Missile deals {self.damage} damage to target!")
+        if target.shield == False:
+            target.health.reduce_health(self.damage * target.self_damage_multiplier)
+        target.shield = False
+        target.self_damage_multiplier = 1.0
 
     def set_spell_state(self, spell_state):
         """Set the spell active state"""
