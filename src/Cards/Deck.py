@@ -12,8 +12,8 @@ class Deck:
 
     POSSIBLE_CARDS = {
         DuelistParadox: 0.3,
-        MagicMissive: 0.3, 
-        ThanosSnapCard: 0.1,
+        MagicMissive: 0.35, 
+        ThanosSnapCard: 0.05,
         CollapseBarrier: 0.3
     }
     
