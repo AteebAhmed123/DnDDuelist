@@ -45,15 +45,20 @@ class Wizard(CharacterBlueprint):
         self.health.character = self  # Set reference to character
         self.screen = screen
         self.position_to_draw = position_to_draw
+        
+        # Initialize the wizard's deck
         self.deck = Deck(screen)
         self.hand = Hand(screen, self.deck)
         self.card_played = []
         self.shield = False
         self.self_damage_multiplier = 1.0
-
+        
         # Damage flash effect
         self.damage_flash = None
         self.character_id = "Wizard"  # Unique ID for this character
+        
+        # Card display effect
+        self.card_display = None
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -111,12 +116,21 @@ class Wizard(CharacterBlueprint):
         self.animation_tracker = 0
 
     def handle_card_click(self, mouse_pos):
-        """Handle clicks on cards in the mage's hand"""
+        """Handle clicks on cards in the wizard's hand"""
         self.current_state = 1
         self.animation_tracker = 0
         card_index = self.hand.handle_click(mouse_pos)
         if card_index >= 0 and card_index < len(self.hand.cards_in_hand):
-            self.card_played.append(self.hand.cards_in_hand[card_index])
+            selected_card = self.hand.cards_in_hand[card_index]
+            
+            # Display the card if we have a card display effect
+            if self.card_display:
+                self.card_display.start(selected_card)
+            
+            # Add to played cards
+            self.card_played.append(selected_card)
+            
+            # Remove from hand and draw a new card if available
             self.hand.remove_card(card_index)
             if (len(self.deck.cards_in_deck) > 0):
                 self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
@@ -135,6 +149,10 @@ class Wizard(CharacterBlueprint):
         if self.self_damage_multiplier > 1.0:
             print("self.self_damage_multiplier Wizard", self.self_damage_multiplier)
             StaticVulnerabilityEffect.render_static_vulnerable(self.screen, self)
+
+    def set_card_display(self, card_display):
+        """Set the card display effect for this character"""
+        self.card_display = card_display
     # def draw_new_hand(self):
     #     """Draw a new hand from the deck"""
     #     self.deck.draw_hand()

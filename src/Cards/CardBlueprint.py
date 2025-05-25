@@ -27,6 +27,17 @@ class CardBlueprint(Sprite):
     def enable_card_played(self):
         self.card_played = True
 
+    def get_card_image(self):
+        """Return the card image for display purposes
+        
+        Returns:
+            pygame.Surface: The card image
+        """
+        sprite_coords = self.get_sprite_coords()
+        if not self.sprite:
+            return None
+        return self.sprite.get_sprite(sprite_coords)
+
     def render(self, position_to_draw):
         """Render the card at the given position"""
         if position_to_draw is None:

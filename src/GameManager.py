@@ -9,6 +9,7 @@ from TurnIndicator import TurnIndicator
 from Effects.DamageIndicator import DamageIndicator
 from Effects.DamageFlash import DamageFlash
 from Effects.GameOver import GameOver
+from Effects.CardPlayedDisplay import CardPlayedDisplay
 
 class GameManager:
     def __init__(self):
@@ -25,6 +26,7 @@ class GameManager:
         self.damage_indicator = DamageIndicator(self.screen)
         self.damage_flash = DamageFlash()
         self.game_over = GameOver(self.screen)
+        self.card_display = CardPlayedDisplay(self.screen)
         
         # Initialize characters
         self.mage = Mage(self.screen, (650,280))
@@ -38,8 +40,16 @@ class GameManager:
         self.mage.set_damage_flash(self.damage_flash)
         self.wizard.set_damage_flash(self.damage_flash)
         
+        # Set card display effect
+        self.mage.set_card_display(self.card_display)
+        self.wizard.set_card_display(self.card_display)
+        
         # Turn counter
         self.turn_counter = 1
+        
+        # Clock for timing
+        self.clock = pygame.time.Clock()
+        self.dt = 0  # Time delta between frames
 
     def setup_display(self):
         background = pygame.image.load("./Assets/image.png")
@@ -63,6 +73,10 @@ class GameManager:
         self.mage.set_damage_flash(self.damage_flash)
         self.wizard.set_damage_flash(self.damage_flash)
         
+        # Set card display effect
+        self.mage.set_card_display(self.card_display)
+        self.wizard.set_card_display(self.card_display)
+        
         # Reset turn counter
         self.turn_counter = 1
     
@@ -79,9 +93,12 @@ class GameManager:
         self.turn_indicator.start_transition(current_player)
         
         while running:
+            # Calculate time delta for animations
+            self.dt = clock.get_time() / 1000.0  # Convert to seconds
+            
             for event in pygame.event.get():
                 # Only process events if turn indicator is not active and game is not over
-                if not self.turn_indicator.is_active and not self.game_over.is_game_over:
+                if not self.turn_indicator.is_active and not self.game_over.is_game_over and not self.card_display.is_active:
                     running = self.handle_events(event, mage_turn, wizard_turn)
                 # Handle game over screen clicks
                 elif self.game_over.is_game_over and event.type == pygame.MOUSEBUTTONDOWN:
@@ -105,6 +122,10 @@ class GameManager:
             # Update effects
             self.damage_indicator.update()
             self.damage_flash.update()
+            self.card_display.update(self.dt)
+            
+            # Render card display (in background, before characters)
+            self.card_display.render()
             
             # Draw turn counter
             font = pygame.font.SysFont('Arial', 24)

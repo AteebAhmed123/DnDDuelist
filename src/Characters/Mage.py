@@ -57,6 +57,9 @@ class Mage(CharacterBlueprint):
         # Damage flash effect
         self.damage_flash = None
         self.character_id = "Mage"  # Unique ID for this character
+        
+        # Card display effect
+        self.card_display = None
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -115,7 +118,16 @@ class Mage(CharacterBlueprint):
         self.animation_tracker = 0
         card_index = self.hand.handle_click(mouse_pos)
         if card_index >= 0 and card_index < len(self.hand.cards_in_hand):
-            self.card_played.append(self.hand.cards_in_hand[card_index])
+            selected_card = self.hand.cards_in_hand[card_index]
+            
+            # Display the card if we have a card display effect
+            if self.card_display:
+                self.card_display.start(selected_card)
+            
+            # Add to played cards
+            self.card_played.append(selected_card)
+            
+            # Remove from hand and draw a new card if available
             self.hand.remove_card(card_index)
             if (len(self.deck.cards_in_deck) > 0):
                 self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
@@ -126,6 +138,10 @@ class Mage(CharacterBlueprint):
     def set_damage_flash(self, damage_flash):
         """Set the damage flash effect for this character"""
         self.damage_flash = damage_flash
+    
+    def set_card_display(self, card_display):
+        """Set the card display effect for this character"""
+        self.card_display = card_display
     
     def trigger_damage_flash(self):
         """Trigger the damage flash effect"""
