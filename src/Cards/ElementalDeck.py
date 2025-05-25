@@ -9,7 +9,7 @@ from SpriteUtil.SpriteUtil import SpriteUtil
 import random
 import pygame
 
-class Deck(AllDecks):
+class ElementalDeck(AllDecks):
 
     POSSIBLE_CARDS = {
         DuelistParadox: 0.3,
@@ -18,22 +18,22 @@ class Deck(AllDecks):
         CollapseBarrier: 0.3
     }
 
-    X_OFFSET = 500
+    X_OFFSET = 650
     Y_OFFSET = -175
     
     def __init__(self, screen):
+        super().__init__(screen, 5, "./Assets/Cards/ElementalDeck.png", (0, 0, 170, 200))
         """Initialize a deck with up to 20 cards"""
-        super().__init__(screen, 20, "./Assets/Cards/deck.png", (0, 0, 130, 200))
         # self.screen = screen
         # self.cards_in_deck = []
-        # self.max_cards = 20
+        # self.max_cards = 5
         # # self.hand = Hand(screen)
         
         # # Initialize deck sprite
-        # self.SPRITE_PATH = "./Assets/Cards/deck.png"
+        # self.SPRITE_PATH = "./Assets/Cards/ElementalDeck.png"
         # self.sprite = SpriteUtil(self.SPRITE_PATH)
-        # self.deck_coords = (0, 0, 130, 200)  # Adjust based on your sprite dimensions
-        # # Initialize with some default cards
+        # self.deck_coords = (0, 0, 170, 200)  # Adjust based on your sprite dimensions
+        # Initialize with some default cards
         self._initialize_default_cards()
 
         
@@ -59,7 +59,7 @@ class Deck(AllDecks):
     #     # Render the hand
     #     # Render the deck sprite at bottom right
     #     deck_image = self.sprite.get_sprite(self.deck_coords)
-    #     deck_x = center_x + self.X_OFFSET  # 20px margin from right edge
+    #     deck_x = center_x + self.X_OFFSET # 20px margin from right edge
     #     deck_y = y_position + self.Y_OFFSET  # 20px margin from bottom edge
     #     self.screen.blit(deck_image, (deck_x, deck_y))
         

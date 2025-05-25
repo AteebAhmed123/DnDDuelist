@@ -5,6 +5,7 @@ from Cards.Deck import Deck
 from Cards.Hands import Hand
 from Spells.Barrier import StaticBarrierShield
 from Spells.BacklashSurge import StaticVulnerabilityEffect
+from Cards.ElementalDeck import ElementalDeck
 
 class Mage(CharacterBlueprint):
 
@@ -43,6 +44,7 @@ class Mage(CharacterBlueprint):
         self.current_state = 0
         self.animation_tracker = 0
         self.health = HealthBar(20, 20, screen)
+        self.elementDeck = ElementalDeck(screen)
         self.health.character = self  # Set reference to character
         self.screen = screen
         self.position_to_draw = position_to_draw
@@ -95,6 +97,7 @@ class Mage(CharacterBlueprint):
                              self.position_to_draw[1] - self.health_bar_display_offset))
         if turn:
             self.render_deck(deck_position[0], deck_position[1])
+            self.elementDeck.render(deck_position[0], deck_position[1])
             self.hand.render(deck_position[0], deck_position[1])
             if (self.card_played != []):
                 for eachCard in self.card_played:

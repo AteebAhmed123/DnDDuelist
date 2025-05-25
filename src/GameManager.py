@@ -17,8 +17,8 @@ class GameManager:
         pygame.init()
 
         # Set up the display
-        self.SCREEN_WIDTH = 800
-        self.SCREEN_HEIGHT = 600
+        self.SCREEN_WIDTH = 1100
+        self.SCREEN_HEIGHT = 700
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         
         # Initialize effects
@@ -29,8 +29,8 @@ class GameManager:
         self.card_display = CardPlayedDisplay(self.screen)
         
         # Initialize characters
-        self.mage = Mage(self.screen, (650,280))
-        self.wizard = Wizard(self.screen, (150,280))
+        self.wizard = Wizard(self.screen, (180,320))
+        self.mage = Mage(self.screen, (900,320))
         
         # Set damage indicators for health bars
         self.mage.health.set_damage_indicator(self.damage_indicator)
@@ -139,7 +139,7 @@ class GameManager:
                 self.screen.blit(player_text, (20, 50))
             
             # Animate characters
-            mage_card_x = self.SCREEN_WIDTH // 2 - 250
+            mage_card_x = self.SCREEN_WIDTH // 2 - 350
             mage_card_y = self.SCREEN_HEIGHT - 50
             mage_turn_result = self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.wizard, turn=mage_turn and not self.game_over.is_game_over)  
             wizard_turn_result = self.wizard.animate(deck_position=(mage_card_x,mage_card_y), target=self.mage, turn=wizard_turn and not self.game_over.is_game_over)

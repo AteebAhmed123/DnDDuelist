@@ -7,6 +7,7 @@ from Cards.Deck import Deck
 from Cards.Hands import Hand
 from Spells.Barrier import StaticBarrierShield
 from Spells.BacklashSurge import StaticVulnerabilityEffect
+from Cards.ElementalDeck import ElementalDeck
 
 class Wizard(CharacterBlueprint):
 
@@ -48,6 +49,7 @@ class Wizard(CharacterBlueprint):
         
         # Initialize the wizard's deck
         self.deck = Deck(screen)
+        self.elementDeck = ElementalDeck(screen)
         self.hand = Hand(screen, self.deck)
         self.card_played = []
         self.shield = False
@@ -93,6 +95,7 @@ class Wizard(CharacterBlueprint):
                              self.position_to_draw[1] - self.health_bar_display_offset))
         if turn:
             self.render_deck(deck_position[0], deck_position[1])
+            self.elementDeck.render(deck_position[0], deck_position[1])
             self.hand.render(deck_position[0], deck_position[1])
             if (self.card_played != []):
                 for eachCard in self.card_played:
