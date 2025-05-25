@@ -1,6 +1,4 @@
 from Cards.DuelistParadox import DuelistParadox
-from Cards.BlastAllVsBlastMe import BlastAllVsBlastMe
-from Cards.ReflectOrGain import ReflectOrGain
 from Cards.MagicMissive import MagicMissive
 from Cards.ThanosSnapCard import ThanosSnapCard
 from Cards.CollapseBarrier import CollapseBarrier

@@ -1,21 +1,24 @@
 from Cards.AllDecks import AllDecks
 from Cards.DuelistParadox import DuelistParadox
-from Cards.BlastAllVsBlastMe import BlastAllVsBlastMe
-from Cards.ReflectOrGain import ReflectOrGain
 from Cards.MagicMissive import MagicMissive
 from Cards.ThanosSnapCard import ThanosSnapCard
 from Cards.CollapseBarrier import CollapseBarrier
+from Cards.ElementalAfflication import ElementalAfflication
 from SpriteUtil.SpriteUtil import SpriteUtil
 import random
 import pygame
 
 class Deck(AllDecks):
 
+    # POSSIBLE_CARDS = {
+    #     DuelistParadox: 0.3,
+    #     MagicMissive: 0.35, 
+    #     ThanosSnapCard: 0.05,
+    #     CollapseBarrier: 0.3
+    # }
+
     POSSIBLE_CARDS = {
-        DuelistParadox: 0.3,
-        MagicMissive: 0.35, 
-        ThanosSnapCard: 0.05,
-        CollapseBarrier: 0.3
+        ElementalAfflication: 1.0
     }
 
     X_OFFSET = 500
