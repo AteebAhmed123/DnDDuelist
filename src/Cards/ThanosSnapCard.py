@@ -20,7 +20,7 @@ class ThanosSnapCard(CardBlueprint):
         self.SPRITE_PATH = "./Assets/Cards/ThanosSnap.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.superposition = Superposition()
-        self.qubit = self.superposition.super_position_qubit(QuantumCircuit(1, 1))
+        self.qubit = self.superposition.apply_superposition_to_qubit(QuantumCircuit(1, 1))
         self.stateType = QuantumState.SUPERPOSITION
         self.collapsedState = None
         self.thanosSnap = ThanosSnap(self.screen)

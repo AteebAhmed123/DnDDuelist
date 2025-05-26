@@ -23,7 +23,7 @@ class CollapseBarrier(CardBlueprint):
         self.activated_card = False
         self.stateType = QuantumState.SUPERPOSITION
         self.superposition = Superposition()
-        self.qubit = self.superposition.super_position_qubit(QuantumCircuit(1, 1))
+        self.qubit = self.superposition.apply_superposition_to_qubit(QuantumCircuit(1, 1))
         self.collapsedState = None
 
 

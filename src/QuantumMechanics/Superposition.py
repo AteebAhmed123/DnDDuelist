@@ -7,31 +7,25 @@ import random
 class Superposition:
     def __init__(self):
         self.backend = AerSimulator()
-        # Circuit always has 1 qubit + 1 classical bit
-        self.qc = QuantumCircuit(1, 1)
 
-    def super_position_qubit(self, qubit):
-        qubit.h(0)
-        qubit.measure(0, 0)
-        return qubit
+    @staticmethod
+    def apply_superposition_to_qubit(qubit, total_states = 2):
+        if (total_states == 2):
+            qubit.h(0)
+            qubit.measure(0, 0)
+        elif (total_states == 4):
+            qubit.h([0, 1])
+            qubit.measure([0, 1], [0, 1])
     
-    def collapse_qubit(self, qubit):
+    @staticmethod
+    def collapse_qubit(qubit):
         sim = AerSimulator()
         job = sim.run(qubit, shots=1)        # run 1,024 shots
         result = job.result()
         counts = result.get_counts()
-        collapsedState = {'0': 0, '1': 0}
-        if '0' in counts:
-            collapsedState['0'] = counts['0']
-        if '1' in counts:
-            collapsedState['1'] = counts['1']
-        
-        if collapsedState['0'] > collapsedState['1']:
-            return 0
-        else:
-            return 1
+        return max(counts, key=counts.get)
+         
 
- 
     # def get_statevector(self):
     #     """Return the exact statevector of the current circuit."""
     #     # Strip out the measurement when peeking at amplitudes

@@ -6,6 +6,10 @@ from Spells.MagicMissile import MagicMissile
 from Spells.ThanosSnap import ThanosSnap
 from QuantumMechanics.QuantumStates import QuantumState
 from QuantumMechanics.Superposition import Superposition
+from Spells.ElementalAttacks.Fireball import Fireball
+from Spells.ElementalAttacks.WindSlash import WindSlash
+from Spells.ElementalAttacks.WaterGeyser import WaterGeyser
+from Spells.ElementalAttacks.EarthSpike import EarthSpike
 from qiskit import QuantumCircuit
 
 class ElementalAfflication(CardBlueprint):
@@ -20,14 +24,13 @@ class ElementalAfflication(CardBlueprint):
         super().__init__(screen)
         self.SPRITE_PATH = "./Assets/Cards/Elementals/ElementalAttacks/ElementalAffliction.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
-        self.spell = Lightning(self.screen)
-        self.heal = Heal(self.screen)
-        self.spell3 = MagicMissile(self.screen)
-        self.spell4 = ThanosSnap(self.screen)
+        self.spell = None
         self.activated_card = False
         self.stateType = QuantumState.SUPERPOSITION
         self.superposition = Superposition()
-        self.qubit = self.superposition.super_position_qubit(QuantumCircuit(1, 1))
+        self.qubit = QuantumCircuit(2, 2)
+        Superposition.apply_superposition_to_qubit(self.qubit, total_states=4)
+        print("elekental afflication qubit")
         self.collapsedState = None
 
 
@@ -36,12 +39,17 @@ class ElementalAfflication(CardBlueprint):
     
     def activate_card(self, caster, target):
         if self.stateType == QuantumState.SUPERPOSITION:
-            self.collapsedState = self.superposition.collapse_qubit(self.qubit)
+            self.collapsedState = Superposition.collapse_qubit(self.qubit)
+            print(self.collapsedState)
             self.stateType = QuantumState.COLLAPSED
+            if (self.collapsedState == '00'):
+                self.spell = EarthSpike(self.screen)
+            elif self.collapsedState == '01':
+                self.spell = WaterGeyser(self.screen)
+            elif self.collapsedState == '11':
+                self.spell = Fireball(self.screen)
+            elif self.collapsedState == '10':
+                self.spell = WindSlash(self.screen)
         
         if (self.collapsedState != None):
-            if (self.collapsedState == 0):
-                return self.spell.animate_spell(caster, target)
-            elif (self.collapsedState == 1):
-                return self.heal.animate_spell(caster, target)                
-    
+            return self.spell.animate_spell(caster, target)
