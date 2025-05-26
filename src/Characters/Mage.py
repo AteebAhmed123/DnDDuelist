@@ -6,6 +6,7 @@ from Cards.Hands import Hand
 from Spells.Barrier import StaticBarrierShield
 from Spells.BacklashSurge import StaticVulnerabilityEffect
 from Cards.ElementalDeck import ElementalDeck
+from Cards.ElementalWeather import ElementalWeather
 
 class Mage(CharacterBlueprint):
 

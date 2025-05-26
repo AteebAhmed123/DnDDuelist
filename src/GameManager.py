@@ -10,6 +10,10 @@ from Effects.DamageIndicator import DamageIndicator
 from Effects.DamageFlash import DamageFlash
 from Effects.GameOver import GameOver
 from Effects.CardPlayedDisplay import CardPlayedDisplay
+from Spells.ElementalWeather.Rain import Rain
+from Spells.ElementalWeather.WindTornado import WindTornado
+from Spells.ElementalWeather.Heatwave import HeatWave
+from Spells.ElementalWeather.Earthquake import Earthquake
 
 class GameManager:
     def __init__(self):
@@ -92,10 +96,11 @@ class GameManager:
         current_player = self.wizard if wizard_turn else self.mage
         self.turn_indicator.start_transition(current_player)
         
+        # wind = WindTornado(self.screen)
+        # wind.start()
         while running:
             # Calculate time delta for animations
             self.dt = clock.get_time() / 1000.0  # Convert to seconds
-            
             for event in pygame.event.get():
                 # Only process events if turn indicator is not active and game is not over
                 if not self.turn_indicator.is_active and not self.game_over.is_game_over and not self.card_display.is_active:
@@ -118,6 +123,7 @@ class GameManager:
             
             # Draw background
             self.screen.blit(game_assets, (0, 0))
+            # wind.animate_spell()
             
             # Update effects
             self.damage_indicator.update()
@@ -167,7 +173,7 @@ class GameManager:
             
             # Render damage indicators (after characters but before turn indicator)
             self.damage_indicator.render()
-            
+
             # Update and render turn indicator if game not over
             if not self.game_over.is_game_over:
                 self.turn_indicator.update()
@@ -176,7 +182,7 @@ class GameManager:
             # Update and render game over screen
             self.game_over.update()
             self.game_over.render()
-            
+
             pygame.display.flip()
             clock.tick(20)
         pygame.quit()

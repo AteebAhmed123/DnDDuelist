@@ -27,9 +27,8 @@ class Rain(SpellBase):
         self.screen_height = screen.get_height()
         
         # Load the rain sound effect
-        # self.rain_sound = pygame.mixer.Sound("./Assets/Sounds/rain.mp3")
-        # self.thunder_sound = pygame.mixer.Sound("./Assets/Sounds/thunder.mp3")
-        # self.sound_playing = False
+        self.thunder_sound = pygame.mixer.Sound("./Assets/Sounds/Weathers/RainThunder.mp3")
+        self.sound_playing = False
         
         # Create initial raindrops
         self._create_raindrops()
@@ -53,19 +52,20 @@ class Rain(SpellBase):
         """Start the rain animation"""
         self.is_active = True
         self._create_raindrops()  # Reset raindrops when starting
-        # if self.rain_sound and not self.sound_playing:
-        #     self.rain_sound.play(-1)  # Loop the rain sound
-        #     self.sound_playing = True
+        self.thunder_sound.play(-1)  # Loop the rain sound
+        self.sound_playing = True
     
     def stop(self):
         """Stop the rain animation"""
         self.is_active = False
+        self.sound_playing = False  # Loop the rain sound
         # if self.rain_sound and self.sound_playing:
         #     self.rain_sound.stop()
         #     self.sound_playing = False
     
     def animate_spell(self, caster=None, target=None):
         """Render the rain effect"""
+        print("rain")
         if not self.is_active:
             return False
         
@@ -90,13 +90,7 @@ class Rain(SpellBase):
         
         # Handle occasional thunder flashes
         current_time = pygame.time.get_ticks() / 1000  # Current time in seconds
-        
-        if not self.thunder_active and random.random() < 0.01:  # Increased chance of thunder
-            self.thunder_active = True
-            self.thunder_timer = current_time
-            # if self.thunder_sound:
-            #     self.thunder_sound.play()
-        
+                
         # If thunder is active, create a flash effect
         if self.thunder_active:
             elapsed = current_time - self.thunder_timer

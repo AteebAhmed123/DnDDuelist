@@ -4,6 +4,7 @@ from Cards.MagicMissive import MagicMissive
 from Cards.ThanosSnapCard import ThanosSnapCard
 from Cards.CollapseBarrier import CollapseBarrier
 from Cards.ElementalAfflication import ElementalAfflication
+from Cards.ElementalWeather import ElementalWeather
 from SpriteUtil.SpriteUtil import SpriteUtil
 import random
 import pygame
@@ -15,7 +16,7 @@ class Deck(AllDecks):
         # MagicMissive: 0.35, 
         # ThanosSnapCard: 0.05,
         # CollapseBarrier: 0.3,
-        ElementalAfflication: 1
+        ElementalWeather: 1
     }
 
     X_OFFSET = 500
