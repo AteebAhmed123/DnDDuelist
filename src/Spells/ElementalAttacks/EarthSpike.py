@@ -3,6 +3,7 @@ import math
 import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
+from Characters.DamageOverTurn import DamageOverTurn
 
 class EarthSpike(SpellBase):
     """WaterGeyser spell that erupts from below the target, lifting them up"""
@@ -27,7 +28,7 @@ class EarthSpike(SpellBase):
         self.current_frame = 0
         self.damage = 2  # Damage dealt by the water geyser
         self.spell_active = False
-        
+        self.turns = 3
         # Geyser properties
         self.geyser = None
         self.geyser_size = (120, 200)  # Size of the geyser (wider and taller)
@@ -126,8 +127,8 @@ class EarthSpike(SpellBase):
         
     def apply_affect(self, target):
         """Apply damage to the target"""
-        target.health.reduce_health(self.damage)
-    
+        target.damage_over_turn = DamageOverTurn(self.damage, self.turns, "EarthSpike")
+            
     def set_spell_state(self, spell_state):
         """Set the spell active state"""
         self.spell_active = spell_state

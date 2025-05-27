@@ -30,7 +30,7 @@ class ElementalAfflication(CardBlueprint):
         self.stateType = QuantumState.SUPERPOSITION
         self.superposition = Superposition()
         self.qubit = QuantumCircuit(2, 2)
-        Superposition.apply_superposition_to_qubit(self.qubit, total_states=4)
+        
         self.collapsedState = None
 
 
@@ -38,6 +38,7 @@ class ElementalAfflication(CardBlueprint):
         return self.CARD_COORDS
     
     def activate_card(self, caster, target):
+        Superposition.apply_superposition_to_qubit(self.qubit, total_states=4)
         if self.stateType == QuantumState.SUPERPOSITION:
             self.collapsedState = Superposition.collapse_qubit(self.qubit)
             self.stateType = QuantumState.COLLAPSED

@@ -1,4 +1,5 @@
 from Cards.Deck import Deck
+from Cards.ElementalWeather import ElementalWeather
 
 class Hand:
     def __init__(self, screen, deck):
@@ -13,6 +14,7 @@ class Hand:
     def bootstrap_cards_from_deck(self):
         """Bootstrap cards from the deck"""
         self.cards_in_hand = self.deck.draw_card_from_deck(self.max_cards)
+        # self.cards_in_hand.append(ElementalWeather(self.screen))
     
     def clear(self):
         """Remove all cards from the hand"""

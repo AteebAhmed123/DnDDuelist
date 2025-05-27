@@ -3,7 +3,7 @@ import math
 import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
-
+from Characters.DamageOverTurn import DamageOverTurn
 class Fireball(SpellBase):
     """Fireball spell that launches a fiery projectile at the target"""
     
@@ -31,9 +31,9 @@ class Fireball(SpellBase):
         self.SPRITE_PATH = "./Assets/Cards/Elementals/ElementalAttacks/Fireball.png"
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.current_frame = 0
-        self.damage = 8  # Damage dealt by the fireball
+        self.damage = 2  # Damage dealt by the fireball
         self.spell_active = False
-        
+        self.turns = 3
         # Fireball properties
         self.fireball = None
         self.fireball_speed = 16 # Speed of fireball
@@ -187,9 +187,8 @@ class Fireball(SpellBase):
     
     def apply_affect(self, target):
         """Apply damage to the target"""
-        # The user will implement this part themselves
-        pass
-    
+        target.damage_over_turn = DamageOverTurn(self.damage, self.turns, "Fireball")
+            
     def set_spell_state(self, spell_state):
         """Set the spell active state"""
         self.spell_active = spell_state 

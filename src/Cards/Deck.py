@@ -12,12 +12,12 @@ import pygame
 class Deck(AllDecks):
 
     POSSIBLE_CARDS = {
-        DuelistParadox: 0.20,
-        MagicMissive: 0.20, 
+        # DuelistParadox: 0.20,
+        # MagicMissive: 0.20, 
         # ThanosSnapCard: 0.20,
-        CollapseBarrier: 0.20,
-        ElementalAfflication: 0.20,
-        ElementalWeather: 0.5
+        # CollapseBarrier: 0.20,
+        ElementalAfflication: 0.5
+        # ElementalWeather: 0.5
     }
 
     X_OFFSET = 500

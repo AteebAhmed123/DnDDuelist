@@ -162,11 +162,19 @@ class GameManager:
                     turn_changed = False
                     
                     if mage_turn_result == False:
+                        # if self.mage.damage_over_turn is not None:
+                        #     self.mage.damage_over_turn.apply_damage(self.mage, self.weather_manager)
+                        # if self.wizard.damage_over_turn is not None:
+                        #     self.wizard.damage_over_turn.apply_damage(self.wizard, self.weather_manager)
                         mage_turn = False
                         wizard_turn = True
                         turn_changed = True
                         self.turn_indicator.start_transition(self.wizard)
                     elif wizard_turn_result == False:
+                        # if self.mage.damage_over_turn is not None:
+                        #     self.mage.damage_over_turn.apply_damage(self.mage, self.weather_manager)
+                        # if self.wizard.damage_over_turn is not None:
+                        #     self.wizard.damage_over_turn.apply_damage(self.wizard, self.weather_manager)
                         mage_turn = True
                         wizard_turn = False
                         turn_changed = True
@@ -210,6 +218,5 @@ class GameManager:
 
             if (card != None and isinstance(card, ElementalWeather)):
                 weather_spell = card.activate_card(None, None)
-                print("Weather spell", weather_spell)
                 self.weather_manager.set_active_weather(weather_spell, 3)
         return True 

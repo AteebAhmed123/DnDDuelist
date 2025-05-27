@@ -56,7 +56,10 @@ class Wizard(CharacterBlueprint):
         self.card_played = []
         self.shield = False
         self.self_damage_multiplier = 1.0
-        
+        self.damage_over_turn = None
+        self.damage_over_turn_applied = False
+        self.turn_tracker = None
+
         # Damage flash effect
         self.damage_flash = None
         self.character_id = "Wizard"  # Unique ID for this character
@@ -93,6 +96,11 @@ class Wizard(CharacterBlueprint):
 
     def animate(self, deck_position, target, turn, weather_manager):
         self.motion_animation()
+        if self.turn_tracker != turn:
+            print(self, self.turn_tracker, turn)
+            if self.damage_over_turn is not None and not self.damage_over_turn_applied:
+                self.damage_over_turn.apply_damage(self, weather_manager)
+            self.turn_tracker = turn
         self.health.animate((self.position_to_draw[0], 
                              self.position_to_draw[1] - self.health_bar_display_offset))
         if turn:
@@ -105,10 +113,12 @@ class Wizard(CharacterBlueprint):
                     if (isinstance(playing_card, WeatherSpells)):
                         weather_manager.set_active_weather(playing_card, 3)
                         self.card_played.remove(eachCard)
+                        self.damage_over_turn_applied = False
                         return False
 
                     if (playing_card == False):
                         self.card_played.remove(eachCard)
+                        self.damage_over_turn_applied = False
                         return False
         return True
 

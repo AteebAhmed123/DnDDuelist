@@ -3,7 +3,7 @@ import math
 import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
-
+from Characters.DamageOverTurn import DamageOverTurn
 class WaterGeyser(SpellBase):
     """WaterGeyser spell that erupts from below the target, lifting them up"""
     
@@ -26,6 +26,7 @@ class WaterGeyser(SpellBase):
         self.current_frame = 0
         self.damage = 2  # Damage dealt by the water geyser
         self.spell_active = False
+        self.turns = 3
         
         # Geyser properties
         self.geyser = None
@@ -150,7 +151,7 @@ class WaterGeyser(SpellBase):
         
     def apply_affect(self, target):
         """Apply damage to the target"""
-        target.health.reduce_health(self.damage)
+        target.damage_over_turn = DamageOverTurn(self.damage, self.turns, "WaterGeyser")
     
     def set_spell_state(self, spell_state):
         """Set the spell active state"""

@@ -3,6 +3,7 @@ import math
 import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
+from Characters.DamageOverTurn import DamageOverTurn
 
 class WindSlash(SpellBase):
     """WindSlash spell that launches a cutting wind projectile at the target"""
@@ -34,7 +35,7 @@ class WindSlash(SpellBase):
         self.current_frame = 0
         self.damage = 2 # Damage dealt by the wind slash
         self.spell_active = False
-        
+        self.turns = 3
         # WindSlash properties
         self.wind_slash = None
         self.wind_slash_speed = 30  # Speed of wind slash (faster than fireball)
@@ -197,8 +198,8 @@ class WindSlash(SpellBase):
     def apply_affect(self, target):
         """Apply damage to the target"""
         # The user will implement this part themselves
-        target.health.reduce_health(self.damage)
-    
+        target.damage_over_turn = DamageOverTurn(self.damage, self.turns, "WindSlash")
+            
     def set_spell_state(self, spell_state):
         """Set the spell active state"""
         self.spell_active = spell_state

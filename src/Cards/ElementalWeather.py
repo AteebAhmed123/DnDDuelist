@@ -27,10 +27,9 @@ class ElementalWeather(CardBlueprint):
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.spell = None
         self.activated_card = False
-        self.stateType = QuantumState.SUPERPOSITION
+        self.stateType = None
         self.superposition = Superposition()
         self.qubit = QuantumCircuit(2, 2)
-        Superposition.apply_superposition_to_qubit(self.qubit, total_states=4)
         self.collapsedState = None
 
 
@@ -38,6 +37,10 @@ class ElementalWeather(CardBlueprint):
         return self.CARD_COORDS
     
     def activate_card(self, caster, target):
+        if (self.stateType == None):
+            Superposition.apply_superposition_to_qubit(self.qubit, total_states=4)
+            self.stateType = QuantumState.SUPERPOSITION
+
         if self.stateType == QuantumState.SUPERPOSITION:
             self.collapsedState = Superposition.collapse_qubit(self.qubit)
             self.stateType = QuantumState.COLLAPSED
