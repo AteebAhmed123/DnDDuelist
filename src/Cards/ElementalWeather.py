@@ -10,6 +10,7 @@ from Spells.ElementalWeather.Rain import Rain
 from Spells.ElementalWeather.Earthquake import Earthquake
 from Spells.ElementalWeather.Heatwave import HeatWave
 from Spells.ElementalWeather.WindTornado import WindTornado
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from qiskit import QuantumCircuit
 
 class ElementalWeather(CardBlueprint):
@@ -40,6 +41,7 @@ class ElementalWeather(CardBlueprint):
         if self.stateType == QuantumState.SUPERPOSITION:
             self.collapsedState = Superposition.collapse_qubit(self.qubit)
             self.stateType = QuantumState.COLLAPSED
+            print(self.collapsedState)
             if (self.collapsedState == '00'):
                 self.spell = Earthquake(self.screen)
             elif self.collapsedState == '01':
@@ -50,6 +52,5 @@ class ElementalWeather(CardBlueprint):
                 self.spell = Rain(self.screen)
         
         if (self.collapsedState != None):
-            if self.spell.is_active != True:
-                self.spell.start()
-            return self.spell.animate_spell(caster, target)
+            print("Returning spell", self.spell)
+            return self.spell

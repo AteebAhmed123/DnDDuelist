@@ -23,7 +23,8 @@ class CollapseBarrier(CardBlueprint):
         self.activated_card = False
         self.stateType = QuantumState.SUPERPOSITION
         self.superposition = Superposition()
-        self.qubit = self.superposition.apply_superposition_to_qubit(QuantumCircuit(1, 1))
+        self.qubit = QuantumCircuit(1, 1)
+        Superposition.apply_superposition_to_qubit(self.qubit, total_states=2)
         self.collapsedState = None
 
 
@@ -32,12 +33,12 @@ class CollapseBarrier(CardBlueprint):
     
     def activate_card(self, caster, target):
         if self.stateType == QuantumState.SUPERPOSITION:
-            self.collapsedState = self.superposition.collapse_qubit(self.qubit)
+            self.collapsedState = Superposition.collapse_qubit(self.qubit)
             self.stateType = QuantumState.COLLAPSED
         
         if (self.collapsedState != None):
-            if (self.collapsedState == 0):
+            if (self.collapsedState == '0'):
                 return self.barrier.animate_spell(caster, target)
-            elif (self.collapsedState == 1):
+            elif (self.collapsedState == '1'):
                 return self.vulnerable.animate_spell(caster, target)                
     

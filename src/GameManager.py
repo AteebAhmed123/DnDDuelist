@@ -14,6 +14,10 @@ from Spells.ElementalWeather.Rain import Rain
 from Spells.ElementalWeather.WindTornado import WindTornado
 from Spells.ElementalWeather.Heatwave import HeatWave
 from Spells.ElementalWeather.Earthquake import Earthquake
+from Cards.ElementalWeather import ElementalWeather
+from Cards.ElementalAfflication import ElementalAfflication
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
+from WeatherManager import WeatherManager
 
 class GameManager:
     def __init__(self):
@@ -35,7 +39,8 @@ class GameManager:
         # Initialize characters
         self.wizard = Wizard(self.screen, (180,320))
         self.mage = Mage(self.screen, (900,320))
-        
+        self.weather_manager = WeatherManager(self.turn_indicator)
+
         # Set damage indicators for health bars
         self.mage.health.set_damage_indicator(self.damage_indicator)
         self.wizard.health.set_damage_indicator(self.damage_indicator)
@@ -66,8 +71,8 @@ class GameManager:
         self.game_over.reset()
         
         # Reinitialize characters 
-        self.mage = Mage(self.screen, (650,280))
-        self.wizard = Wizard(self.screen, (150,280))
+        self.wizard = Wizard(self.screen, (180,320))
+        self.mage = Mage(self.screen, (900,320))
         
         # Set damage indicators for health bars
         self.mage.health.set_damage_indicator(self.damage_indicator)
@@ -95,9 +100,6 @@ class GameManager:
         # Show initial turn indicator
         current_player = self.wizard if wizard_turn else self.mage
         self.turn_indicator.start_transition(current_player)
-        
-        # wind = WindTornado(self.screen)
-        # wind.start()
         while running:
             # Calculate time delta for animations
             self.dt = clock.get_time() / 1000.0  # Convert to seconds
@@ -123,8 +125,8 @@ class GameManager:
             
             # Draw background
             self.screen.blit(game_assets, (0, 0))
+            self.weather_manager.animate_weather()
             # wind.animate_spell()
-            
             # Update effects
             self.damage_indicator.update()
             self.damage_flash.update()
@@ -147,8 +149,8 @@ class GameManager:
             # Animate characters
             mage_card_x = self.SCREEN_WIDTH // 2 - 350
             mage_card_y = self.SCREEN_HEIGHT - 50
-            mage_turn_result = self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.wizard, turn=mage_turn and not self.game_over.is_game_over)  
-            wizard_turn_result = self.wizard.animate(deck_position=(mage_card_x,mage_card_y), target=self.mage, turn=wizard_turn and not self.game_over.is_game_over)
+            mage_turn_result = self.mage.animate(deck_position=(mage_card_x,mage_card_y), target=self.wizard, turn=mage_turn and not self.game_over.is_game_over, weather_manager=self.weather_manager)  
+            wizard_turn_result = self.wizard.animate(deck_position=(mage_card_x,mage_card_y), target=self.mage, turn=wizard_turn and not self.game_over.is_game_over, weather_manager=self.weather_manager)
             
             # Check for game over conditions
             if not self.game_over.is_game_over:
@@ -198,10 +200,16 @@ class GameManager:
                 self.mage.attack()
                 self.wizard.attack()
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            card = None
             # Handle card clicks
             mouse_pos = pygame.mouse.get_pos()
             if mage_turn == True:
-                self.mage.handle_card_click(mouse_pos)
+                card = self.mage.handle_card_click(mouse_pos)
             elif wizard_turn == True:
-                self.wizard.handle_card_click(mouse_pos)
+                card = self.wizard.handle_card_click(mouse_pos)
+
+            if (card != None and isinstance(card, ElementalWeather)):
+                weather_spell = card.activate_card(None, None)
+                print("Weather spell", weather_spell)
+                self.weather_manager.set_active_weather(weather_spell, 3)
         return True 

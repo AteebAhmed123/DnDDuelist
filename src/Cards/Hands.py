@@ -36,7 +36,6 @@ class Hand:
         """Handle click on cards, return index of clicked card or -1"""
         for i, card in enumerate(self.cards_in_hand):
             if card.is_clicked(mouse_pos):
-                print(f"Card {i} clicked!")
                 return i
         return -1
     

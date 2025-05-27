@@ -7,6 +7,7 @@ from Spells.Barrier import StaticBarrierShield
 from Spells.BacklashSurge import StaticVulnerabilityEffect
 from Cards.ElementalDeck import ElementalDeck
 from Cards.ElementalWeather import ElementalWeather
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 
 class Mage(CharacterBlueprint):
 
@@ -92,7 +93,7 @@ class Mage(CharacterBlueprint):
         self.animation_tracker = self.animation_tracker + 1
         self.screen.blit(sprite_standing_image, sprite_standing_image_position)
     
-    def animate(self, deck_position, target, turn):
+    def animate(self, deck_position, target, turn, weather_manager):
         self.motion_animation()
         self.health.animate((self.position_to_draw[0], 
                              self.position_to_draw[1] - self.health_bar_display_offset))
@@ -103,6 +104,11 @@ class Mage(CharacterBlueprint):
             if (self.card_played != []):
                 for eachCard in self.card_played:
                     playing_card = eachCard.activate_card(self, target)
+                    if (isinstance(playing_card, WeatherSpells)):
+                        weather_manager.set_active_weather(playing_card, 3)
+                        self.card_played.remove(eachCard)
+                        return False
+
                     if (playing_card == False):
                         self.card_played.remove(eachCard)
                         return False
@@ -128,11 +134,8 @@ class Mage(CharacterBlueprint):
             if self.card_display:
                 self.card_display.start(selected_card)
             
-            # Add to played cards
-            self.card_played.append(selected_card)
-            
-            # Remove from hand and draw a new card if available
             self.hand.remove_card(card_index)
+            self.card_played.append(selected_card)            
             if (len(self.deck.cards_in_deck) > 0):
                 self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
 
@@ -160,6 +163,5 @@ class Mage(CharacterBlueprint):
     def render_vulnerable(self):
         """Render the vulnerable for this character"""
         if self.self_damage_multiplier > 1.0:
-            print("self.self_damage_multiplier Mage", self.self_damage_multiplier)
             StaticVulnerabilityEffect.render_static_vulnerable(self.screen, self)
 

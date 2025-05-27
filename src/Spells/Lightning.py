@@ -66,8 +66,6 @@ class Lightning(SpellBase):
             lightning_image, 
             position)  
         
-        print(target)
- 
         # Draw the lightning
         self.screen.blit(lightning_image, sprite_standing_image_position)
         self.current_frame = self.current_frame + 1

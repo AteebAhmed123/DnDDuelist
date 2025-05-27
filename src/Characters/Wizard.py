@@ -8,6 +8,8 @@ from Cards.Hands import Hand
 from Spells.Barrier import StaticBarrierShield
 from Spells.BacklashSurge import StaticVulnerabilityEffect
 from Cards.ElementalDeck import ElementalDeck
+from Cards.ElementalWeather import ElementalWeather
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 
 class Wizard(CharacterBlueprint):
 
@@ -89,7 +91,7 @@ class Wizard(CharacterBlueprint):
         self.animation_tracker = self.animation_tracker + 1
         self.screen.blit(pygame.transform.flip(sprite_standing_image, True, False), sprite_standing_image_position)
 
-    def animate(self, deck_position, target, turn):
+    def animate(self, deck_position, target, turn, weather_manager):
         self.motion_animation()
         self.health.animate((self.position_to_draw[0], 
                              self.position_to_draw[1] - self.health_bar_display_offset))
@@ -100,6 +102,11 @@ class Wizard(CharacterBlueprint):
             if (self.card_played != []):
                 for eachCard in self.card_played:
                     playing_card = eachCard.activate_card(self, target)
+                    if (isinstance(playing_card, WeatherSpells)):
+                        weather_manager.set_active_weather(playing_card, 3)
+                        self.card_played.remove(eachCard)
+                        return False
+
                     if (playing_card == False):
                         self.card_played.remove(eachCard)
                         return False
@@ -130,12 +137,10 @@ class Wizard(CharacterBlueprint):
             if self.card_display:
                 self.card_display.start(selected_card)
             
-            # Add to played cards
-            self.card_played.append(selected_card)
-            
-            # Remove from hand and draw a new card if available
             self.hand.remove_card(card_index)
+            self.card_played.append(selected_card)
             if (len(self.deck.cards_in_deck) > 0):
+                print("Activating card", type(selected_card))
                 self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
 
     def render_deck(self, center_x, y_position):

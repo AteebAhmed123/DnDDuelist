@@ -31,7 +31,6 @@ class ElementalAfflication(CardBlueprint):
         self.superposition = Superposition()
         self.qubit = QuantumCircuit(2, 2)
         Superposition.apply_superposition_to_qubit(self.qubit, total_states=4)
-        print("elekental afflication qubit")
         self.collapsedState = None
 
 
@@ -41,7 +40,6 @@ class ElementalAfflication(CardBlueprint):
     def activate_card(self, caster, target):
         if self.stateType == QuantumState.SUPERPOSITION:
             self.collapsedState = Superposition.collapse_qubit(self.qubit)
-            print(self.collapsedState)
             self.stateType = QuantumState.COLLAPSED
             if (self.collapsedState == '00'):
                 self.spell = EarthSpike(self.screen)

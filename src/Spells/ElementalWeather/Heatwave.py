@@ -3,8 +3,9 @@ import random
 from Spells.SpellBase import SpellBase
 from SpriteUtil.SpriteUtil import SpriteUtil
 import math
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 
-class HeatWave(SpellBase):
+class HeatWave(WeatherSpells):
     """HeatWave spell that creates a heat/fire effect in the middle of the screen"""
     
     # Define the sprite frame coordinates for the fire animation

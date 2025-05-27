@@ -3,8 +3,9 @@ import random
 import math
 from Spells.SpellBase import SpellBase
 from SpriteUtil.SpriteUtil import SpriteUtil
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 
-class Earthquake(SpellBase):
+class Earthquake(WeatherSpells):
     """Earthquake spell that creates a nature disruption effect with trees falling down"""
     
     # Define the sprite frame coordinates for the tree/nature animation

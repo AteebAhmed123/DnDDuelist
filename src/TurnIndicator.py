@@ -41,6 +41,7 @@ class TurnIndicator:
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.current_state = 0
         self.animation_tracker = 0
+        self.total_turns = 0
         
         
     def start_transition(self, next_player):
@@ -51,15 +52,19 @@ class TurnIndicator:
         """
         self.is_active = True
         self.animation_progress = 0.0
-        print("turn_indicato", next_player)
         self.next_player = next_player
-        
+        self.total_turns = self.total_turns + 1
+
+    def get_total_turns(self):
+        return self.total_turns
+
     def update(self):
         """Update the animation state
         
         Returns:
             True if animation is still active, False when complete
         """
+        # print("turn_indicator_update", self.total_turns)
         if not self.is_active:
             return False
             

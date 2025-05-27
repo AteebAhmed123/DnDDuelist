@@ -2,8 +2,9 @@ import pygame
 import random
 from Spells.SpellBase import SpellBase
 from SpriteUtil.SpriteUtil import SpriteUtil
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 
-class WindTornado(SpellBase):
+class WindTornado(WeatherSpells):
     """WindTornado spell that creates a tornado effect in the middle of the screen"""
     
     # Define the sprite frame coordinates for the tornado animation

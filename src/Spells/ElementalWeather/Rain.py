@@ -2,8 +2,9 @@ import pygame
 import random
 from Spells.SpellBase import SpellBase
 from SpriteUtil.SpriteUtil import SpriteUtil
+from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 
-class Rain(SpellBase):
+class Rain(WeatherSpells):
     """Rain spell that creates a rain effect in the background"""
     
     def __init__(self, screen):
@@ -59,13 +60,13 @@ class Rain(SpellBase):
         """Stop the rain animation"""
         self.is_active = False
         self.sound_playing = False  # Loop the rain sound
+        self.thunder_sound.stop()
         # if self.rain_sound and self.sound_playing:
         #     self.rain_sound.stop()
         #     self.sound_playing = False
     
     def animate_spell(self, caster=None, target=None):
         """Render the rain effect"""
-        print("rain")
         if not self.is_active:
             return False
         
