@@ -15,14 +15,35 @@ class Deck(AllDecks):
 
     POSSIBLE_CARDS = {
         DuelistParadox: 0.35,
-        # MagicMissive: 0.15, 
-        # # ThanosSnapCard: 0.20,
-        CollapseBarrier: 0.35,
-        # ElementalAfflication: 0.35,  # Re-enabled for testing
-        # PhaseBias: 0.1,  # 10% chance for Phase Bias cards
+        MagicMissive: 0.25,
+        ThanosSnapCard: 0.25,
+        CollapseBarrier: 0.25,
+        ElementalAfflication: 0.25,  # Re-enabled for testing
+        PhaseBias: 0.25,  # 10% chance for Phase Bias cards
         QuantumTunneling: 0.35  # Increased for testing
-        # ElementalWeather: 0.5
     }
+
+    # POSSIBLE_CARDS = {
+    #     DuelistParadox: 0.35,
+    #     # MagicMissive: 0.15, 
+    #     # # ThanosSnapCard: 0.20,
+    #     CollapseBarrier: 0.35,
+    #     # ElementalAfflication: 0.35,  # Re-enabled for testing
+    #     # PhaseBias: 0.1,  # 10% chance for Phase Bias cards
+    #     QuantumTunneling: 0.35  # Increased for testing
+    #     # ElementalWeather: 0.5
+    # }
+
+    # POSSIBLE_CARDS = {
+    #     DuelistParadox: 0.35,
+    #     # MagicMissive: 0.15, 
+    #     # # ThanosSnapCard: 0.20,
+    #     CollapseBarrier: 0.35,
+    #     # ElementalAfflication: 0.35,  # Re-enabled for testing
+    #     # PhaseBias: 0.1,  # 10% chance for Phase Bias cards
+    #     QuantumTunneling: 0.35  # Increased for testing
+    #     # ElementalWeather: 0.5
+    # }
 
     X_OFFSET = 500
     Y_OFFSET = -175

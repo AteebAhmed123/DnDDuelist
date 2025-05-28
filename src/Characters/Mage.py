@@ -54,7 +54,7 @@ class Mage(CharacterBlueprint):
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.current_state = 0
         self.animation_tracker = 0
-        self.health = HealthBar(20, 20, screen)
+        self.health = HealthBar(100, 100, screen)
         self.elementDeck = ElementalDeck(screen)
         self.health.character = self  # Set reference to character
         self.screen = screen
