@@ -37,9 +37,9 @@ class MagicMissive(CardBlueprint):
         
         if (self.collapsedState != None):
             if (self.collapsedState == '0'):
-                return self.magicMissile.animate_spell(caster, target)
+                return self.magicMissile.animate_spell(caster, target), None
             elif (self.collapsedState == '1'):
-                return self.self_harm_magic_missile.animate_spell(caster, target)   
+                return self.self_harm_magic_missile.animate_spell(caster, target), None   
 
     def apply_affect(self, caster, target):
         return self.spell.animate_spell(caster, target)

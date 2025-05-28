@@ -55,7 +55,7 @@ class TurnIndicator:
         self.next_player = next_player
         self.total_turns = self.total_turns + 1
 
-    def get_total_turns(self):
+    def get_current_turn(self):
         return self.total_turns
 
     def update(self):

@@ -10,12 +10,14 @@ from Effects.DamageIndicator import DamageIndicator
 from Effects.DamageFlash import DamageFlash
 from Effects.GameOver import GameOver
 from Effects.CardPlayedDisplay import CardPlayedDisplay
+from Effects.PhaseBiasUI import PhaseBiasUI
 from Spells.ElementalWeather.Rain import Rain
 from Spells.ElementalWeather.WindTornado import WindTornado
 from Spells.ElementalWeather.Heatwave import HeatWave
 from Spells.ElementalWeather.Earthquake import Earthquake
 from Cards.ElementalWeather import ElementalWeather
 from Cards.ElementalAfflication import ElementalAfflication
+from Cards.PhaseBias import PhaseBias
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from WeatherManager import WeatherManager
 
@@ -35,6 +37,7 @@ class GameManager:
         self.damage_flash = DamageFlash()
         self.game_over = GameOver(self.screen)
         self.card_display = CardPlayedDisplay(self.screen)
+        self.phase_bias_ui = PhaseBiasUI(self.screen)
         
         # Initialize characters
         self.wizard = Wizard(self.screen, (180,320))
@@ -212,11 +215,8 @@ class GameManager:
             # Handle card clicks
             mouse_pos = pygame.mouse.get_pos()
             if mage_turn == True:
-                card = self.mage.handle_card_click(mouse_pos)
+                self.mage.handle_card_click(mouse_pos)
             elif wizard_turn == True:
-                card = self.wizard.handle_card_click(mouse_pos)
+                self.wizard.handle_card_click(mouse_pos)
 
-            if (card != None and isinstance(card, ElementalWeather)):
-                weather_spell = card.activate_card(None, None)
-                self.weather_manager.set_active_weather(weather_spell, 3)
         return True 

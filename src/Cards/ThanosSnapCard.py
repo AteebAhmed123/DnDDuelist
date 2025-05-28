@@ -36,9 +36,9 @@ class ThanosSnapCard(CardBlueprint):
         
         if (self.collapsedState != None):
             if (self.collapsedState == '0'):
-                return self.thanosSnap.animate_spell(caster, caster)
+                return self.thanosSnap.animate_spell(caster, caster), None
             elif (self.collapsedState == '1'):
-                return self.thanosSnap.animate_spell(caster, target)
+                return self.thanosSnap.animate_spell(caster, target), None
 
     def apply_affect(self, caster, target):
         return self.spell.animate_spell(caster, target)

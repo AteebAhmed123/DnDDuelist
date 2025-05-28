@@ -1,12 +1,8 @@
-from qiskit import QuantumCircuit, Aer, execute
+from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+from qiskit.primitives import BackendSamplerV2
+from qiskit.quantum_info import Statevector
 from QuantumMechanics.QuantumStates import QuantumState
-from QuantumMechanics.Superposition import Superposition
-from WeatherManager import WeatherManager, WeatherType
-from Spells.ElementalWeather.Rain import Rain
-from Spells.ElementalWeather.WindTornado import WindTornado
-from Spells.ElementalWeather.Heatwave import HeatWave
-from Spells.ElementalWeather.Earthquake import Earthquake
-from Cards.ElementalAfflication import ElementalAfflication
 
 class QuantumEntanglement:
     """
@@ -18,8 +14,6 @@ class QuantumEntanglement:
         self.screen = screen
         self.weather_manager = weather_manager
         self.game_manager = game_manager
-        self.entangled_circuit = None
-        self.setup_entanglement()
         
         # Track the collapse state of both cards
         self.afflication_collapsed = False
@@ -29,105 +23,131 @@ class QuantumEntanglement:
         self.afflication_state = None
         self.weather_state = None
         
+        # Create the entangled quantum circuit
+        self.entangled_circuit = QuantumCircuit(4, 4)
+        self.setup_entanglement()
+        
     def setup_entanglement(self):
         """Create the entangled quantum circuit using Bell state"""
+        # Reset the circuit
         self.entangled_circuit = QuantumCircuit(4, 4)
         
-        # Create entanglement between qubits 0-1 and 2-3
-        # First pair for ElementalAfflication, Second pair for ElementalWeather
-        self.entangled_circuit.h([0, 2])  # Apply Hadamard to first qubit of each pair
-        self.entangled_circuit.cx(0, 1)   # Apply CNOT to entangle first pair
-        self.entangled_circuit.cx(2, 3)   # Apply CNOT to entangle second pair
+        # First pair (qubits 0,1) for ElementalAfflication
+        # Second pair (qubits 2,3) for ElementalWeather
         
-        # Entangle the two pairs
-        self.entangled_circuit.cx(0, 2)   # Create entanglement between the pairs
+        # Create superposition on first qubit of each pair
+        self.entangled_circuit.h([0, 2])
         
-        # Measure all qubits
+        # Create entanglement within each pair
+        self.entangled_circuit.cx(0, 1)
+        self.entangled_circuit.cx(2, 3)
+        
+        # Create entanglement between pairs
+        self.entangled_circuit.cx(0, 2)
+        
+        # Add measurements
         self.entangled_circuit.measure([0, 1, 2, 3], [0, 1, 2, 3])
-    
-    def collapse_states(self):
-        """
-        Collapse the entangled state and return the results
-        """
-        sim = Aer.get_backend('aer_simulator')
-        job = execute(self.entangled_circuit, sim, shots=1)
+        
+    @staticmethod
+    def simulate_entanglement():
+        entangled_circuit = QuantumCircuit(4, 4)
+        
+        # First pair (qubits 0,1) for ElementalAfflication
+        # Second pair (qubits 2,3) for ElementalWeather
+        
+        # Create superposition on first qubit of each pair
+        entangled_circuit.h([0, 2])
+        
+        # Create entanglement within each pair
+        entangled_circuit.cx(0, 1)
+        entangled_circuit.cx(2, 3)
+        
+        # Create entanglement between pairs
+        entangled_circuit.cx(0, 2)
+        
+        # Add measurements
+        entangled_circuit.measure([0, 1, 2, 3], [0, 1, 2, 3])
+        sim = AerSimulator()
+        job = sim.run(entangled_circuit, shots=1)        # run 1,024 shots
         result = job.result()
         counts = result.get_counts()
-        outcome = list(counts.keys())[0]  # Get the single outcome
+        outcome = max(counts, key=counts.get)
+        afflication_state = outcome[0:2]  # First two bits
+        weather_state = outcome[2:4]      # Last two bits
+        return afflication_state, weather_state
+
+
+    def collapse_states(self):
+        """Collapse both states at once and return the results"""
+        # Use qiskit to simulate the measurement
+        sim = AerSimulator()
+        job = sim.run(self.entangled_circuit, shots=1)        # run 1,024 shots
+        result = job.result()
+        counts = result.get_counts()
+        return max(counts, key=counts.get)
         
-        # Parse the 4-bit outcome
-        afflication_state = outcome[:2]
-        weather_state = outcome[2:]
+        # Parse the 4-bit outcome into two 2-bit states
+        afflication_state = outcome[0:2]  # First two bits
+        weather_state = outcome[2:4]      # Last two bits
         
-        # Store the states
+        # Update internal state
         self.afflication_state = afflication_state
         self.weather_state = weather_state
+        self.afflication_collapsed = True
+        self.weather_collapsed = True
         
         return afflication_state, weather_state
     
-    def handle_afflication_collapse(self, afflication_state, caster):
-        """
-        When ElementalAfflication collapses, determine and set the corresponding
-        ElementalWeather state
-        """
+    def handle_afflication_collapse(self, state, caster):
+        """Handle the case where ElementalAfflication is measured first"""
         self.afflication_collapsed = True
-        self.afflication_state = afflication_state
+        self.afflication_state = state
         
-        # If already have a predetermined weather state from previous entanglement
-        if self.weather_collapsed:
-            return self.weather_state
-        
-        # Map ElementalAfflication states to their corresponding ElementalWeather states
-        if afflication_state == '00':  # EarthSpike
+        # Determine the corresponding weather state based on the mapping
+        if state == '00':  # EarthSpike
             weather_state = '00'  # Earthquake
-        elif afflication_state == '01':  # WaterGeyser
+        elif state == '01':  # WaterGeyser
             weather_state = '10'  # Rain
-        elif afflication_state == '11':  # Fireball
+        elif state == '11':  # Fireball
             weather_state = '01'  # HeatWave
-        elif afflication_state == '10':  # WindSlash
+        elif state == '10':  # WindSlash
             weather_state = '11'  # WindTornado
         
         self.weather_state = weather_state
         self.weather_collapsed = True
         
-        # Create and activate the corresponding weather spell
-        self._activate_weather_spell(weather_state)
+        # Activate the weather effect
+        self._activate_weather(weather_state)
         
         return weather_state
     
-    def handle_weather_collapse(self, weather_state):
-        """
-        When ElementalWeather collapses, determine and set the corresponding
-        ElementalAfflication state
-        """
+    def handle_weather_collapse(self, state):
+        """Handle the case where ElementalWeather is measured first"""
         self.weather_collapsed = True
-        self.weather_state = weather_state
+        self.weather_state = state
         
-        # If already have a predetermined afflication state from previous entanglement
-        if self.afflication_collapsed:
-            return self.afflication_state
-        
-        # Map ElementalWeather states to their corresponding ElementalAfflication states
-        if weather_state == '00':  # Earthquake
+        # Determine the corresponding afflication state based on the mapping
+        if state == '00':  # Earthquake
             afflication_state = '00'  # EarthSpike
-        elif weather_state == '10':  # Rain
+        elif state == '10':  # Rain
             afflication_state = '01'  # WaterGeyser
-        elif weather_state == '01':  # HeatWave
+        elif state == '01':  # HeatWave
             afflication_state = '11'  # Fireball
-        elif weather_state == '11':  # WindTornado
+        elif state == '11':  # WindTornado
             afflication_state = '10'  # WindSlash
         
         self.afflication_state = afflication_state
         self.afflication_collapsed = True
         
-        # Update the ElementalAfflication card state in both players' hands
-        if self.game_manager:
-            self._update_player_afflication_cards(afflication_state)
-        
         return afflication_state
     
-    def _activate_weather_spell(self, weather_state):
-        """Create and activate the appropriate weather spell based on state"""
+    def _activate_weather(self, weather_state):
+        """Activate the appropriate weather effect"""
+        from Spells.ElementalWeather.Rain import Rain
+        from Spells.ElementalWeather.WindTornado import WindTornado
+        from Spells.ElementalWeather.Heatwave import HeatWave
+        from Spells.ElementalWeather.Earthquake import Earthquake
+        
         weather_spell = None
         weather_duration = 3  # Duration in turns
         
@@ -140,27 +160,11 @@ class QuantumEntanglement:
         elif weather_state == '11':  # WindTornado
             weather_spell = WindTornado(self.screen)
         
-        if weather_spell:
+        if weather_spell and self.weather_manager:
             self.weather_manager.set_active_weather(weather_spell, weather_duration)
     
-    def _update_player_afflication_cards(self, afflication_state):
-        """Update the ElementalAfflication cards in players' hands"""
-        # This method would be called when weather collapses first
-        # It would update all ElementalAfflication cards to be in the corresponding state
-        
-        if self.game_manager:
-            # Update Wizard's ElementalAfflication card
-            for card in self.game_manager.wizard.cards:
-                if isinstance(card, ElementalAfflication):
-                    card.force_collapse_state(afflication_state)
-                    
-            # Update Mage's ElementalAfflication card
-            for card in self.game_manager.mage.cards:
-                if isinstance(card, ElementalAfflication):
-                    card.force_collapse_state(afflication_state)
-    
-    def reset_entanglement(self):
-        """Reset the entanglement state"""
+    def reset(self):
+        """Reset the entanglement state for a new round"""
         self.afflication_collapsed = False
         self.weather_collapsed = False
         self.afflication_state = None

@@ -8,6 +8,12 @@ from Spells.BacklashSurge import StaticVulnerabilityEffect
 from Cards.ElementalDeck import ElementalDeck
 from Cards.ElementalWeather import ElementalWeather
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
+from Cards.ElementalAfflication import ElementalAfflication
+from WeatherManager import WeatherType
+from Cards.ElementalAttacksCards.WaterGeyserCard import WaterGeyserCard
+from Cards.ElementalAttacksCards.WindTornadoCard import WindTornadoCard
+from Cards.ElementalAttacksCards.BurningHandsCard import BurningHandCard
+from Cards.ElementalAttacksCards.EarthSpikeCard import EarthSpikeCard
 
 class Mage(CharacterBlueprint):
 
@@ -98,7 +104,6 @@ class Mage(CharacterBlueprint):
     def animate(self, deck_position, target, turn, weather_manager):
         self.motion_animation()
         if self.turn_tracker != turn:
-            print(self, self.turn_tracker, turn)
             if self.damage_over_turn is not None and not self.damage_over_turn_applied:
                 self.damage_over_turn.apply_damage(self, weather_manager)
             self.turn_tracker = turn
@@ -110,16 +115,41 @@ class Mage(CharacterBlueprint):
             self.hand.render(deck_position[0], deck_position[1])
             if (self.card_played != []):
                 for eachCard in self.card_played:
-                    playing_card = eachCard.activate_card(self, target)
+                    playing_card, accompany_card = eachCard.activate_card(self, target)
+
                     if (isinstance(playing_card, WeatherSpells)):
                         weather_manager.set_active_weather(playing_card, 3)
                         self.card_played.remove(eachCard)
                         self.damage_over_turn_applied = False
+                        if (accompany_card != None):
+                            for eachCard in range(0,len(self.hand.cards_in_hand)):
+                                if (type(self.hand.cards_in_hand[eachCard]) == ElementalAfflication):
+                                    if (weather_manager.weather_type == WeatherType.RAIN):
+                                        self.hand.cards_in_hand[eachCard] = WaterGeyserCard(self.screen)
+                                    elif (weather_manager.weather_type == WeatherType.WIND):
+                                        self.hand.cards_in_hand[eachCard] = WindTornadoCard(self.screen)
+                                    elif (weather_manager.weather_type == WeatherType.HEAT):
+                                        self.hand.cards_in_hand[eachCard] = BurningHandCard(self.screen)
+                                    elif (weather_manager.weather_type == WeatherType.EARTH):
+                                        self.hand.cards_in_hand[eachCard] = EarthSpikeCard(self.screen)
                         return False
 
                     if (playing_card == False):
-                        self.damage_over_turn_applied = False
                         self.card_played.remove(eachCard)
+                        if (accompany_card != None):
+                            weather_manager.set_active_weather(accompany_card.spell, 3)
+                            for eachCard in range(0,len(self.hand.cards_in_hand)):
+                                print("found elemental afflication",eachCard, weather_manager.weather_type, type(self.hand.cards_in_hand[eachCard]))
+                                if (weather_manager.weather_type == WeatherType.RAIN):
+                                    self.hand.cards_in_hand[eachCard] = WaterGeyserCard(self.screen)
+                                elif (weather_manager.weather_type == WeatherType.WIND):
+                                    self.hand.cards_in_hand[eachCard] = WindTornadoCard(self.screen)
+                                elif (weather_manager.weather_type == WeatherType.HEAT):
+                                    self.hand.cards_in_hand[eachCard] = BurningHandCard(self.screen)
+                                elif (weather_manager.weather_type == WeatherType.EARTH):
+                                    self.hand.cards_in_hand[eachCard] = EarthSpikeCard(self.screen)
+
+                        self.damage_over_turn_applied = False
                         return False
 
         return True
@@ -137,6 +167,15 @@ class Mage(CharacterBlueprint):
         self.current_state = 1
         self.animation_tracker = 0
         card_index = self.hand.handle_click(mouse_pos)
+        deck_click = self.elementDeck.handle_click(mouse_pos)
+        
+        # Check if ElementalDeck was clicked
+        if deck_click is not None:
+            elemental_weather = ElementalWeather(self.screen)
+            self.card_display.start(elemental_weather)
+            self.card_played.append(elemental_weather)
+            return deck_click  # Return the ElementalWeather card
+        
         if card_index >= 0 and card_index < len(self.hand.cards_in_hand):
             selected_card = self.hand.cards_in_hand[card_index]
             
@@ -148,6 +187,8 @@ class Mage(CharacterBlueprint):
             self.card_played.append(selected_card)            
             if (len(self.deck.cards_in_deck) > 0):
                 self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
+        
+        return None
 
     def play_card(self, card):
         pass

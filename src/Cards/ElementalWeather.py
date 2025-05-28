@@ -12,11 +12,17 @@ from Spells.ElementalWeather.Heatwave import HeatWave
 from Spells.ElementalWeather.WindTornado import WindTornado
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from qiskit import QuantumCircuit
+from QuantumMechanics.Entanglement import QuantumEntanglement
+from Cards.ElementalAttacksCards.EarthSpikeCard import EarthSpikeCard
+from Cards.ElementalAttacksCards.WaterGeyserCard import WaterGeyserCard
+from Cards.ElementalAttacksCards.BurningHandsCard import BurningHandCard
+from Cards.ElementalAttacksCards.WindTornadoCard import WindTornadoCard
+
 
 class ElementalWeather(CardBlueprint):
     # Define sprite coordinates for the card
     CARD_COORDS = (0, 0, 250, 350)  # Assuming the card takes up the full sprite
-    name = "Elemental Afflication"
+    name = "Elemental Weather"
     description = "Afflict the opponent with a random elemental effect."
     damage = 0
     
@@ -31,6 +37,11 @@ class ElementalWeather(CardBlueprint):
         self.superposition = Superposition()
         self.qubit = QuantumCircuit(2, 2)
         self.collapsedState = None
+        
+        # Phase bias attributes
+        self.has_phase_bias = False
+        self.phase_bias_state = None
+        self.phase_bias_strength = 0.5
 
 
     def get_sprite_coords(self):
@@ -42,9 +53,25 @@ class ElementalWeather(CardBlueprint):
             self.stateType = QuantumState.SUPERPOSITION
 
         if self.stateType == QuantumState.SUPERPOSITION:
-            self.collapsedState = Superposition.collapse_qubit(self.qubit)
+            # Check if phase bias has been applied
+            if self.has_phase_bias and self.phase_bias_state:
+                # Create a new biased quantum circuit
+                biased_qubit = QuantumCircuit(2, 2)
+                Superposition.apply_biased_superposition_to_qubit(
+                    biased_qubit, 
+                    total_states=4, 
+                    bias_state=self.phase_bias_state, 
+                    bias_strength=self.phase_bias_strength
+                )
+                self.collapsedState = Superposition.collapse_qubit(biased_qubit)
+                print(f"ElementalWeather collapsed with bias toward {self.phase_bias_state}: result = {self.collapsedState}")
+            else:
+                # Normal collapse without bias
+                self.collapsedState = Superposition.collapse_qubit(self.qubit)
+                print(f"ElementalWeather collapsed normally: result = {self.collapsedState}")
+            
             self.stateType = QuantumState.COLLAPSED
-            print(self.collapsedState)
+            
             if (self.collapsedState == '00'):
                 self.spell = Earthquake(self.screen)
             elif self.collapsedState == '01':
@@ -57,3 +84,13 @@ class ElementalWeather(CardBlueprint):
         if (self.collapsedState != None):
             print("Returning spell", self.spell)
             return self.spell
+
+    def interpret_afflication_state(self, state):
+        if state == '00':
+            return EarthSpikeCard(self.screen)
+        elif state == '01':
+            return WaterGeyserCard(self.screen)
+        elif state == '11':
+            return BurningHandCard(self.screen)
+        elif state == '10':
+            return WindTornadoCard(self.screen)
