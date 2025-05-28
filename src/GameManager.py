@@ -10,6 +10,7 @@ from Effects.DamageIndicator import DamageIndicator
 from Effects.DamageFlash import DamageFlash
 from Effects.GameOver import GameOver
 from Effects.CardPlayedDisplay import CardPlayedDisplay
+from Effects.QuantumTunnelingIndicator import QuantumTunnelingIndicator
 from Spells.ElementalWeather.Rain import Rain
 from Spells.ElementalWeather.WindTornado import WindTornado
 from Spells.ElementalWeather.Heatwave import HeatWave
@@ -38,6 +39,7 @@ class GameManager:
         self.game_over = GameOver(self.screen)
         self.card_display = CardPlayedDisplay(self.screen)
         self.phase_bias_manager = PhaseBiasManager(self.screen)
+        self.quantum_tunneling_indicator = QuantumTunnelingIndicator(self.screen)
         
         # Initialize characters
         self.wizard = Wizard(self.screen, (180,320))
@@ -59,6 +61,10 @@ class GameManager:
         # Set phase bias manager
         self.mage.set_phase_bias_manager(self.phase_bias_manager)
         self.wizard.set_phase_bias_manager(self.phase_bias_manager)
+        
+        # Set quantum tunneling indicator
+        self.mage.set_quantum_tunneling_indicator(self.quantum_tunneling_indicator)
+        self.wizard.set_quantum_tunneling_indicator(self.quantum_tunneling_indicator)
         
         # Turn counter
         self.turn_counter = 1
@@ -96,6 +102,10 @@ class GameManager:
         # Set phase bias manager
         self.mage.set_phase_bias_manager(self.phase_bias_manager)
         self.wizard.set_phase_bias_manager(self.phase_bias_manager)
+        
+        # Set quantum tunneling indicator
+        self.mage.set_quantum_tunneling_indicator(self.quantum_tunneling_indicator)
+        self.wizard.set_quantum_tunneling_indicator(self.quantum_tunneling_indicator)
         
         # Reset turn counter
         self.turn_counter = 1
@@ -154,6 +164,7 @@ class GameManager:
             self.damage_indicator.update()
             self.damage_flash.update()
             self.card_display.update(self.dt)
+            self.quantum_tunneling_indicator.update()
             
             # Render card display (in background, before characters)
             self.card_display.render()
@@ -206,6 +217,9 @@ class GameManager:
             
             # Render damage indicators (after characters but before turn indicator)
             self.damage_indicator.render()
+
+            # Render quantum tunneling indicators
+            self.quantum_tunneling_indicator.render()
 
             # Update and render turn indicator if game not over
             if not self.game_over.is_game_over:

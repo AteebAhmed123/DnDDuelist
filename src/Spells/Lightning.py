@@ -1,6 +1,7 @@
 import pygame
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
+from QuantumMechanics.QuantumTunneling import QuantumTunneling
 import time
 
 class Lightning(SpellBase):
@@ -40,7 +41,7 @@ class Lightning(SpellBase):
         # self.lightning_sound.play()
         # print(self.current_frame, len(self.animation_frames))
         if (self.current_frame > len(self.animation_frames) - 1):
-            self.apply_affect(target)
+            self.apply_affect(caster, target)
             self.sound_played = False  # Reset sound flag when animation completes
             return False
         
@@ -72,12 +73,9 @@ class Lightning(SpellBase):
         return True
         
         
-    def apply_affect(self, target):
-        """Apply damage to the target"""
-        if target.shield == False:
-            target.health.reduce_health(self.damage * target.self_damage_multiplier)
-        target.shield = False
-        target.self_damage_multiplier = 1.0
+    def apply_affect(self, caster, target):
+        """Apply damage to the target using quantum tunneling system"""
+        QuantumTunneling.apply_tunneling_damage(caster, target, self.damage)
 
     def set_spell_state(self, spell_state):
         """Set the spell active state"""

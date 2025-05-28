@@ -10,6 +10,7 @@ from Spells.BacklashSurge import StaticVulnerabilityEffect
 from Cards.ElementalDeck import ElementalDeck
 from Cards.ElementalWeather import ElementalWeather
 from Cards.PhaseBias import PhaseBias
+from Cards.QuantumTunneling import QuantumTunneling
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from Cards.ElementalAfflication import ElementalAfflication
 from WeatherManager import WeatherType
@@ -17,6 +18,7 @@ from Cards.ElementalAttacksCards.WaterGeyserCard import WaterGeyserCard
 from Cards.ElementalAttacksCards.WindTornadoCard import WindTornadoCard
 from Cards.ElementalAttacksCards.BurningHandsCard import BurningHandCard
 from Cards.ElementalAttacksCards.EarthSpikeCard import EarthSpikeCard
+from Effects.QuantumTunnelingIndicator import QuantumTunnelingIndicator
 
 class Wizard(CharacterBlueprint):
 
@@ -76,6 +78,10 @@ class Wizard(CharacterBlueprint):
         
         # Phase bias manager
         self.phase_bias_manager = None
+        
+        # Quantum tunneling properties
+        self.quantum_tunneling_active = False
+        self.tunneling_probability = 0.0
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -83,6 +89,7 @@ class Wizard(CharacterBlueprint):
     def motion_animation(self):
         self.render_shield()
         self.render_vulnerable()
+        self.render_quantum_tunneling()
         sprite_image = self.sprite_states[self.current_state]
 
         if self.animation_tracker > len(sprite_image)-1:
@@ -237,6 +244,10 @@ class Wizard(CharacterBlueprint):
             print("self.self_damage_multiplier Wizard", self.self_damage_multiplier)
             StaticVulnerabilityEffect.render_static_vulnerable(self.screen, self)
 
+    def render_quantum_tunneling(self):
+        """Render the quantum tunneling indicator for this character"""
+        QuantumTunnelingIndicator.render_static_tunneling_active(self.screen, self)
+
     def set_card_display(self, card_display):
         """Set the card display effect for this character"""
         self.card_display = card_display
@@ -244,6 +255,11 @@ class Wizard(CharacterBlueprint):
     def set_phase_bias_manager(self, phase_bias_manager):
         """Set the phase bias manager for this character"""
         self.phase_bias_manager = phase_bias_manager
+
+    def set_quantum_tunneling_indicator(self, quantum_tunneling_indicator):
+        """Set the quantum tunneling indicator for this character"""
+        self.quantum_tunneling_indicator = quantum_tunneling_indicator
+
     # def draw_new_hand(self):
     #     """Draw a new hand from the deck"""
     #     self.deck.draw_hand()

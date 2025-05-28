@@ -6,6 +6,7 @@ from Cards.CollapseBarrier import CollapseBarrier
 from Cards.ElementalAfflication import ElementalAfflication
 from Cards.ElementalWeather import ElementalWeather
 from Cards.PhaseBias import PhaseBias
+from Cards.QuantumTunneling import QuantumTunneling
 from SpriteUtil.SpriteUtil import SpriteUtil
 import random
 import pygame
@@ -13,12 +14,13 @@ import pygame
 class Deck(AllDecks):
 
     POSSIBLE_CARDS = {
-        DuelistParadox: 0.15,
-        MagicMissive: 0.15, 
-        # ThanosSnapCard: 0.20,
-        CollapseBarrier: 0.15,
-        ElementalAfflication: 0.45,
-        PhaseBias: 0.1  # 10% chance for Phase Bias cards
+        DuelistParadox: 0.35,
+        # MagicMissive: 0.15, 
+        # # ThanosSnapCard: 0.20,
+        CollapseBarrier: 0.35,
+        # ElementalAfflication: 0.35,  # Re-enabled for testing
+        # PhaseBias: 0.1,  # 10% chance for Phase Bias cards
+        QuantumTunneling: 0.35  # Increased for testing
         # ElementalWeather: 0.5
     }
 

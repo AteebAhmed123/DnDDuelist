@@ -3,6 +3,7 @@ import math
 import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
+from QuantumMechanics.QuantumTunneling import QuantumTunneling
 
 class MagicMissile(SpellBase):
     """Magic missile spell that launches multiple missiles at the target"""
@@ -54,6 +55,7 @@ class MagicMissile(SpellBase):
             self.missiles = []
             self.current_frame = 0
             self.sound_played = False
+            self.caster = caster  # Store caster for damage application
             
             # Create missiles
             for _ in range(self.max_missiles):
@@ -116,7 +118,7 @@ class MagicMissile(SpellBase):
                 missile['hit'] = True
                 # Apply damage when the last missile hits
                 if all(m['hit'] for m in self.missiles):
-                    self.apply_affect(target)
+                    self.apply_affect(self.caster, target)
                 continue
             
             # Update animation frame
@@ -156,12 +158,9 @@ class MagicMissile(SpellBase):
         """
         return (1 - t)**2 * p0 + 2 * (1 - t) * t * p1 + t**2 * p2
         
-    def apply_affect(self, target):
-        """Apply damage to the target"""
-        if target.shield == False:
-            target.health.reduce_health(self.damage * target.self_damage_multiplier)
-        target.shield = False
-        target.self_damage_multiplier = 1.0
+    def apply_affect(self, caster, target):
+        """Apply damage to the target using quantum tunneling system"""
+        QuantumTunneling.apply_tunneling_damage(caster, target, self.damage)
 
     def set_spell_state(self, spell_state):
         """Set the spell active state"""

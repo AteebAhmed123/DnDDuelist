@@ -3,6 +3,7 @@ import math
 import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
+from QuantumMechanics.QuantumTunneling import QuantumTunneling
 
 class MagicMissileV2(SpellBase):
     """Magic missile spell that reverses direction and hits the caster"""
@@ -138,7 +139,7 @@ class MagicMissileV2(SpellBase):
                 missile['hit'] = True
                 # Apply damage when the last missile hits
                 if all(m['hit'] for m in self.missiles):
-                    self.apply_affect(caster)
+                    self.apply_affect(caster, caster)  # Pass caster as both attacker and target
                 continue
             
             # Update animation frame
@@ -185,9 +186,6 @@ class MagicMissileV2(SpellBase):
         """
         return (1 - t)**2 * p0 + 2 * (1 - t) * t * p1 + t**2 * p2
         
-    def apply_affect(self, target):
-        """Apply damage to the target (caster)"""
-        if target.shield == False:
-            target.health.reduce_health(self.damage * target.self_damage_multiplier)
-        target.shield = False
-        target.self_damage_multiplier = 1.0
+    def apply_affect(self, caster, target):
+        """Apply damage to the target (caster) using quantum tunneling system"""
+        QuantumTunneling.apply_tunneling_damage(caster, target, self.damage)
