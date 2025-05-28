@@ -73,6 +73,6 @@ class DuelistParadox(CardBlueprint):
     def get_possible_states(self):
         """Return the possible states for this card for UI selection"""
         return {
-            '0': "Lightning Attack (10 damage)",
-            '1': "Heal Self (10 HP)"
+            '0': "Lightning Attack (5 damage)",
+            '1': "Heal Self (3 HP)"
         }                
