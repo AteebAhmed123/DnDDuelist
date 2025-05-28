@@ -24,6 +24,7 @@ class BacklashSurge(SpellBase):
         sound_path = "./Assets/Sounds/alarm.mp3"
         total_path = os.path.join(parent2, sound_path)
         self.surge_sound = pygame.mixer.Sound(total_path)
+        self.surge_sound.set_volume(0.5)
         
     def start(self):
         """Start the vulnerability effect"""

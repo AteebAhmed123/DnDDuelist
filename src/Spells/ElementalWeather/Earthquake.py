@@ -62,6 +62,7 @@ class Earthquake(WeatherSpells):
 
         self.crash_sound = pygame.mixer.Sound(total_path)
         self.sound_played = False
+        self.crash_sound.set_volume(0.5)
     
     def create_particles(self):
         """Create particles for the tree falling impact"""

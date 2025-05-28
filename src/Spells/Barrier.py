@@ -37,6 +37,7 @@ class Barrier(SpellBase):
         sound_path = "./Assets/Sounds/energyshieldsound.mp3"
         total_path = os.path.join(parent2, sound_path)
         self.heal_sound = pygame.mixer.Sound(total_path)
+        self.heal_sound.set_volume(0.5)
         
     def animate_spell(self, caster, target):
         """Animate the lightning spell with frame delays"""

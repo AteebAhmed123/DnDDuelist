@@ -44,6 +44,7 @@ class MagicMissileV2(SpellBase):
         sound_path = "./Assets/Sounds/magicmissile.mp3"
         total_path = os.path.join(parent2, sound_path)
         self.missile_sound = pygame.mixer.Sound(total_path)
+        self.missile_sound.set_volume(0.5)
         self.sound_played = False
 
     def animate_spell(self, caster, target):

@@ -36,7 +36,7 @@ class Rain(WeatherSpells):
 
         self.thunder_sound = pygame.mixer.Sound(total_path)
         self.sound_playing = False
-        
+        self.thunder_sound.set_volume(0.5)
         # Create initial raindrops
         self._create_raindrops()
     

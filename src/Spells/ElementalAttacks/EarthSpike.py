@@ -54,6 +54,7 @@ class EarthSpike(SpellBase):
         parent3 = os.path.dirname(parent2)
         total_path = os.path.join(parent3, "./Assets/Sounds/Elementals/earthspike.mp3")
         self.geyser_sound = pygame.mixer.Sound(total_path)
+        self.geyser_sound.set_volume(0.5)
     
     def animate_spell(self, caster, target):
         """Animate the water geyser spell

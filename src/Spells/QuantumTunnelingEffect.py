@@ -37,6 +37,7 @@ class QuantumTunnelingEffect(SpellBase):
             sound_path = "./Assets/Sounds/energyshieldsound.mp3"
             total_path = os.path.join(parent2, sound_path)
             self.tunneling_sound = pygame.mixer.Sound(total_path)
+            self.tunneling_sound.set_volume(0.5)
         except:
             self.tunneling_sound = None
         

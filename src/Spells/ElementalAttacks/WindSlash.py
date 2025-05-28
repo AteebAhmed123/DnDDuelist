@@ -57,7 +57,9 @@ class WindSlash(SpellBase):
 
         self.launch_sound = pygame.mixer.Sound(soundlaunch)
         self.explosion_sound = pygame.mixer.Sound(soundexplosion)
-    
+        self.launch_sound.set_volume(0.5)
+        self.explosion_sound.set_volume(0.5)
+        
     def animate_spell(self, caster, target):
         """Animate the wind slash spell
         

@@ -41,8 +41,8 @@ class Heal(SpellBase):
         parent2 = os.path.dirname(parent1)
         sound_path = "./Assets/Sounds/heal.mp3"
         total_path = os.path.join(parent2, sound_path)
-        
         self.heal_sound = pygame.mixer.Sound(total_path)
+        self.heal_sound.set_volume(0.5)
         
     def animate_spell(self, caster, target):
         """Animate the lightning spell with frame delays"""

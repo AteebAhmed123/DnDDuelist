@@ -56,8 +56,8 @@ class HeatWave(WeatherSpells):
         parent3 = os.path.dirname(parent2)
         total_path = os.path.join(parent3, "./Assets/Sounds/Weathers/Fire.mp3")
 
-
         self.fire_sound = pygame.mixer.Sound(total_path)
+        self.fire_sound.set_volume(0.5)
         self.sound_playing = False
     
     def create_heat_effects(self):

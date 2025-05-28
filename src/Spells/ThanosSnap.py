@@ -52,7 +52,7 @@ class ThanosSnap(SpellBase):
         
         total_path_snap = os.path.join(parent2, sound_path_snap)
         self.snap_sound = pygame.mixer.Sound(total_path_snap)
-        
+        self.snap_sound.set_volume(0.5)
     def animate_spell(self, caster, target):
         """Animate the Thanos Snap spell
         

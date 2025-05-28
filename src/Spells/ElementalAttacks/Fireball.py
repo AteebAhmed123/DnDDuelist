@@ -54,7 +54,8 @@ class Fireball(SpellBase):
         soundexplosion = os.path.join(parent3, "./Assets/Sounds/Elementals/fire_explosion.mp3")
         self.launch_sound = pygame.mixer.Sound(soundlaunch)
         self.explosion_sound = pygame.mixer.Sound(soundexplosion)
-    
+        self.launch_sound.set_volume(0.5)
+        self.explosion_sound.set_volume(0.5)
     def animate_spell(self, caster, target):
         """Animate the fireball spell
         

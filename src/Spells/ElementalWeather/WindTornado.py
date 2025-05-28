@@ -55,6 +55,7 @@ class WindTornado(WeatherSpells):
         total_path = os.path.join(parent3, "./Assets/Sounds/Weathers/tornado.mp3")
 
         self.wind_sound = pygame.mixer.Sound(total_path)
+        self.wind_sound.set_volume(0.5)
         self.sound_playing = False
     
     def create_wind_effects(self):
