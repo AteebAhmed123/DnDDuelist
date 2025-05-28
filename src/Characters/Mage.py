@@ -150,7 +150,6 @@ class Mage(CharacterBlueprint):
                         if (accompany_card != None):
                             weather_manager.set_active_weather(accompany_card.spell, 3)
                             for eachCard in range(0,len(self.hand.cards_in_hand)):
-                                print("found elemental afflication",eachCard, weather_manager.weather_type, type(self.hand.cards_in_hand[eachCard]))
                                 if (weather_manager.weather_type == WeatherType.RAIN):
                                     self.hand.cards_in_hand[eachCard] = WaterGeyserCard(self.screen)
                                 elif (weather_manager.weather_type == WeatherType.WIND):

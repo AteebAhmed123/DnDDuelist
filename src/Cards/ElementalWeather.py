@@ -41,7 +41,6 @@ class ElementalWeather(CardBlueprint):
         return self.CARD_COORDS
     
     def activate_card(self, caster, target):
-        print(self.stateType)
         if self.stateType == QuantumState.ENTANGLED:
             self.afflicationState, self.collapsedState = QuantumEntanglement.simulate_entanglement()
             

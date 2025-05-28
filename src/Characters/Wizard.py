@@ -114,7 +114,6 @@ class Wizard(CharacterBlueprint):
     def animate(self, deck_position, target, turn, weather_manager):
         self.motion_animation()
         if self.turn_tracker != turn:
-            print(self, self.turn_tracker, turn)
             if self.damage_over_turn is not None and not self.damage_over_turn_applied:
                 self.damage_over_turn.apply_damage(self, weather_manager)
             self.turn_tracker = turn
@@ -127,7 +126,6 @@ class Wizard(CharacterBlueprint):
             if (self.card_played != []):
                 for eachCard in self.card_played:
                     playing_spell, accompany_card = eachCard.activate_card(self, target)
-                    print(type(playing_spell), isinstance(playing_spell, WeatherSpells))
                     if (isinstance(playing_spell, WeatherSpells)):
                         weather_manager.set_active_weather(playing_spell, 3)
                         self.card_played.remove(eachCard)
@@ -150,7 +148,6 @@ class Wizard(CharacterBlueprint):
                         if (accompany_card != None):
                             weather_manager.set_active_weather(accompany_card.spell, 3)                            
                             for eachCard in range(0,len(self.hand.cards_in_hand)):
-                                print("found elemental afflication",eachCard, weather_manager.weather_type, type(self.hand.cards_in_hand[eachCard]))
                                 if (type(self.hand.cards_in_hand[eachCard]) == ElementalAfflication):
                                     if (weather_manager.weather_type == WeatherType.RAIN):
                                         self.hand.cards_in_hand[eachCard] = WaterGeyserCard(self.screen)
@@ -233,7 +230,6 @@ class Wizard(CharacterBlueprint):
     def render_vulnerable(self):
         """Render the vulnerable for this character"""
         if self.self_damage_multiplier > 1.0:
-            print("self.self_damage_multiplier Wizard", self.self_damage_multiplier)
             StaticVulnerabilityEffect.render_static_vulnerable(self.screen, self)
 
     def render_quantum_tunneling(self):
