@@ -195,14 +195,14 @@ class Mage(CharacterBlueprint):
                 # Start Phase Bias targeting
                 if self.phase_bias_manager:
                     targeting_success = self.phase_bias_manager.start_targeting(selected_card, self.hand.cards_in_hand)
-                    if targeting_success:
-                        # Remove the Phase Bias card from hand only if targeting started successfully
-                        self.hand.remove_card(card_index)
-                        if (len(self.deck.cards_in_deck) > 0):
-                            self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
-                    else:
-                        # Targeting failed (no valid targets), show a message or just do nothing
-                        # The card remains in hand
+                    # Always remove the Phase Bias card from hand, regardless of targeting success
+                    self.hand.remove_card(card_index)
+                    if (len(self.deck.cards_in_deck) > 0):
+                        self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
+                    
+                    if not targeting_success:
+                        # Targeting failed (no valid targets), card is discarded automatically
+                        # The error message is already shown by the phase_bias_manager
                         pass
                 return None
             

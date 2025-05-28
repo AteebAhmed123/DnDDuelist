@@ -45,7 +45,7 @@ class PhaseBiasManager:
         # If no valid targets found, cancel immediately
         if not self.target_cards:
             self.is_active = False
-            self.show_error_message("No Superposition cards in hand to target!")
+            self.show_error_message("No Superposition cards to target! Phase Bias discarded.")
             return False  # Indicate that targeting failed
         
         return True  # Indicate that targeting started successfully
