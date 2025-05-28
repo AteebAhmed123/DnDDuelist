@@ -5,6 +5,7 @@ from Cards.ThanosSnapCard import ThanosSnapCard
 from Cards.CollapseBarrier import CollapseBarrier
 from Cards.ElementalAfflication import ElementalAfflication
 from Cards.ElementalWeather import ElementalWeather
+from Cards.PhaseBias import PhaseBias
 from SpriteUtil.SpriteUtil import SpriteUtil
 import random
 import pygame
@@ -12,11 +13,12 @@ import pygame
 class Deck(AllDecks):
 
     POSSIBLE_CARDS = {
-        # DuelistParadox: 0.20,
-        # MagicMissive: 0.20, 
+        DuelistParadox: 0.15,
+        MagicMissive: 0.15, 
         # ThanosSnapCard: 0.20,
-        # CollapseBarrier: 0.20,
-        ElementalAfflication: 0.5
+        CollapseBarrier: 0.15,
+        ElementalAfflication: 0.45,
+        PhaseBias: 0.1  # 10% chance for Phase Bias cards
         # ElementalWeather: 0.5
     }
 

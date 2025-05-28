@@ -17,7 +17,7 @@ class WeatherManager:
         self.stop_weather()
         self.weather_spell = weather_spell
         self.weather_active_turns = weather_active_turns
-        self.turn_at_spell_start = self.turn_indicator.get_total_turns()
+        self.turn_at_spell_start = self.turn_indicator.get_current_turn()
 
         if (type(weather_spell) == Rain):
             self.weather_type = WeatherType.RAIN
@@ -44,7 +44,7 @@ class WeatherManager:
             self.weather_spell.animate_spell()
         
     def is_weather_over(self):
-        current_turn = self.turn_indicator.get_total_turns()
+        current_turn = self.turn_indicator.get_current_turn()
         if (current_turn > self.turn_at_spell_start + self.weather_active_turns):
             return True
 

@@ -16,8 +16,10 @@ from Spells.ElementalWeather.Heatwave import HeatWave
 from Spells.ElementalWeather.Earthquake import Earthquake
 from Cards.ElementalWeather import ElementalWeather
 from Cards.ElementalAfflication import ElementalAfflication
+from Cards.PhaseBias import PhaseBias
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from WeatherManager import WeatherManager
+from Utils.PhaseBiasManager import PhaseBiasManager
 
 class GameManager:
     def __init__(self):
@@ -35,6 +37,7 @@ class GameManager:
         self.damage_flash = DamageFlash()
         self.game_over = GameOver(self.screen)
         self.card_display = CardPlayedDisplay(self.screen)
+        self.phase_bias_manager = PhaseBiasManager(self.screen)
         
         # Initialize characters
         self.wizard = Wizard(self.screen, (180,320))
@@ -52,6 +55,10 @@ class GameManager:
         # Set card display effect
         self.mage.set_card_display(self.card_display)
         self.wizard.set_card_display(self.card_display)
+        
+        # Set phase bias manager
+        self.mage.set_phase_bias_manager(self.phase_bias_manager)
+        self.wizard.set_phase_bias_manager(self.phase_bias_manager)
         
         # Turn counter
         self.turn_counter = 1
@@ -86,6 +93,10 @@ class GameManager:
         self.mage.set_card_display(self.card_display)
         self.wizard.set_card_display(self.card_display)
         
+        # Set phase bias manager
+        self.mage.set_phase_bias_manager(self.phase_bias_manager)
+        self.wizard.set_phase_bias_manager(self.phase_bias_manager)
+        
         # Reset turn counter
         self.turn_counter = 1
     
@@ -104,8 +115,16 @@ class GameManager:
             # Calculate time delta for animations
             self.dt = clock.get_time() / 1000.0  # Convert to seconds
             for event in pygame.event.get():
-                # Only process events if turn indicator is not active and game is not over
-                if not self.turn_indicator.is_active and not self.game_over.is_game_over and not self.card_display.is_active:
+                # Handle Phase Bias Manager clicks first (highest priority)
+                if self.phase_bias_manager.is_active and event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.phase_bias_manager.handle_click(pygame.mouse.get_pos()):
+                        continue  # Phase Bias Manager handled the click
+                
+                # Only process events if turn indicator is not active and game is not over and phase bias is not active
+                if (not self.turn_indicator.is_active and 
+                    not self.game_over.is_game_over and 
+                    not self.card_display.is_active and 
+                    not self.phase_bias_manager.is_active):
                     running = self.handle_events(event, mage_turn, wizard_turn)
                 # Handle game over screen clicks
                 elif self.game_over.is_game_over and event.type == pygame.MOUSEBUTTONDOWN:
@@ -121,7 +140,11 @@ class GameManager:
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    running = False
+                    # Cancel Phase Bias if active
+                    if self.phase_bias_manager.is_active:
+                        self.phase_bias_manager.cancel()
+                    else:
+                        running = False
             
             # Draw background
             self.screen.blit(game_assets, (0, 0))
@@ -192,6 +215,9 @@ class GameManager:
             # Update and render game over screen
             self.game_over.update()
             self.game_over.render()
+            
+            # Render Phase Bias Manager (on top of everything)
+            self.phase_bias_manager.render()
 
             pygame.display.flip()
             clock.tick(20)
@@ -212,11 +238,8 @@ class GameManager:
             # Handle card clicks
             mouse_pos = pygame.mouse.get_pos()
             if mage_turn == True:
-                card = self.mage.handle_card_click(mouse_pos)
+                self.mage.handle_card_click(mouse_pos)
             elif wizard_turn == True:
-                card = self.wizard.handle_card_click(mouse_pos)
+                self.wizard.handle_card_click(mouse_pos)
 
-            if (card != None and isinstance(card, ElementalWeather)):
-                weather_spell = card.activate_card(None, None)
-                self.weather_manager.set_active_weather(weather_spell, 3)
         return True 

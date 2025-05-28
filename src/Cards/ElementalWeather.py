@@ -12,6 +12,12 @@ from Spells.ElementalWeather.Heatwave import HeatWave
 from Spells.ElementalWeather.WindTornado import WindTornado
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from qiskit import QuantumCircuit
+from QuantumMechanics.Entanglement import QuantumEntanglement
+from Cards.ElementalAttacksCards.EarthSpikeCard import EarthSpikeCard
+from Cards.ElementalAttacksCards.WaterGeyserCard import WaterGeyserCard
+from Cards.ElementalAttacksCards.BurningHandsCard import BurningHandCard
+from Cards.ElementalAttacksCards.WindTornadoCard import WindTornadoCard
+
 
 class ElementalWeather(CardBlueprint):
     # Define sprite coordinates for the card
@@ -27,9 +33,7 @@ class ElementalWeather(CardBlueprint):
         self.sprite = SpriteUtil(self.SPRITE_PATH)
         self.spell = None
         self.activated_card = False
-        self.stateType = None
-        self.superposition = Superposition()
-        self.qubit = QuantumCircuit(2, 2)
+        self.stateType = QuantumState.ENTANGLED
         self.collapsedState = None
 
 
@@ -37,23 +41,30 @@ class ElementalWeather(CardBlueprint):
         return self.CARD_COORDS
     
     def activate_card(self, caster, target):
-        if (self.stateType == None):
-            Superposition.apply_superposition_to_qubit(self.qubit, total_states=4)
-            self.stateType = QuantumState.SUPERPOSITION
-
-        if self.stateType == QuantumState.SUPERPOSITION:
-            self.collapsedState = Superposition.collapse_qubit(self.qubit)
+        print(self.stateType)
+        if self.stateType == QuantumState.ENTANGLED:
+            self.afflicationState, self.collapsedState = QuantumEntanglement.simulate_entanglement()
+            
             self.stateType = QuantumState.COLLAPSED
-            print(self.collapsedState)
-            if (self.collapsedState == '00'):
+            if self.collapsedState == '00':
                 self.spell = Earthquake(self.screen)
             elif self.collapsedState == '01':
-                self.spell = HeatWave(self.screen)
-            elif self.collapsedState == '11':
-                self.spell = WindTornado(self.screen)
-            elif self.collapsedState == '10':
                 self.spell = Rain(self.screen)
-        
+            elif self.collapsedState == '11':
+                self.spell = HeatWave(self.screen)
+            elif self.collapsedState == '10':
+                self.spell = WindTornado(self.screen)
+
         if (self.collapsedState != None):
-            print("Returning spell", self.spell)
-            return self.spell
+            return self.spell, self.interpret_afflication_state(self.afflicationState)
+        
+
+    def interpret_afflication_state(self, state):
+        if state == '00':
+            return EarthSpikeCard(self.screen)
+        elif state == '01':
+            return WaterGeyserCard(self.screen)
+        elif state == '11':
+            return BurningHandCard(self.screen)
+        elif state == '10':
+            return WindTornadoCard(self.screen)
