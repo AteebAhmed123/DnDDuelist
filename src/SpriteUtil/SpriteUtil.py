@@ -1,12 +1,17 @@
 import pygame
-
+import os
 class SpriteUtil:
     def __init__(self, sprite_path):
         self.SPRITE_PATH = sprite_path
         self.sprite_sheet = self.load_sprite_sheet()
 
     def load_sprite_sheet(self):
-        return pygame.image.load(self.SPRITE_PATH).convert_alpha()
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+
+        # go up one level
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        return pygame.image.load(os.path.join(parent2, self.SPRITE_PATH)).convert_alpha()
 
     def draw_sprite_image_at(self, sprite_image, position = None):    
         if position is None:
@@ -26,4 +31,3 @@ class SpriteUtil:
             return image
         except Exception as e:
             return None
-    

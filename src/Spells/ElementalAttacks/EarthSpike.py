@@ -4,7 +4,7 @@ import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 from Characters.DamageOverTurn import DamageOverTurn
-
+import os
 class EarthSpike(SpellBase):
     """WaterGeyser spell that erupts from below the target, lifting them up"""
     
@@ -48,7 +48,12 @@ class EarthSpike(SpellBase):
                   
         # Load the water geyser sound effects
         self.sound_played = False
-        self.geyser_sound = pygame.mixer.Sound("./Assets/Sounds/Elementals/earthspike.mp3")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        parent3 = os.path.dirname(parent2)
+        total_path = os.path.join(parent3, "./Assets/Sounds/Elementals/earthspike.mp3")
+        self.geyser_sound = pygame.mixer.Sound(total_path)
     
     def animate_spell(self, caster, target):
         """Animate the water geyser spell

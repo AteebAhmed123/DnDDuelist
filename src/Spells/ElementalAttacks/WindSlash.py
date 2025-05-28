@@ -4,7 +4,7 @@ import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 from Characters.DamageOverTurn import DamageOverTurn
-
+import os
 class WindSlash(SpellBase):
     """WindSlash spell that launches a cutting wind projectile at the target"""
     
@@ -46,8 +46,17 @@ class WindSlash(SpellBase):
                   
         # Load the wind slash sound effects
         self.sound_played = False
-        self.launch_sound = pygame.mixer.Sound("./Assets/Sounds/Elementals/wind_launch.wav")
-        self.explosion_sound = pygame.mixer.Sound("./Assets/Sounds/Elementals/wind_slash.mp3")
+
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        parent3 = os.path.dirname(parent2)
+        soundlaunch = os.path.join(parent3, "./Assets/Sounds/Elementals/wind_launch.wav")
+        soundexplosion = os.path.join(parent3, "./Assets/Sounds/Elementals/wind_slash.mp3")
+
+        self.launch_sound = pygame.mixer.Sound(soundlaunch)
+        self.explosion_sound = pygame.mixer.Sound(soundexplosion)
     
     def animate_spell(self, caster, target):
         """Animate the wind slash spell

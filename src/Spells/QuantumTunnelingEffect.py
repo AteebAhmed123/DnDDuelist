@@ -2,7 +2,7 @@ import pygame
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 import math
-
+import os
 class QuantumTunnelingEffect(SpellBase):
     """Quantum tunneling effect that creates a shimmering aura around the caster"""
     
@@ -31,7 +31,12 @@ class QuantumTunnelingEffect(SpellBase):
         # Load sound effect
         self.sound_played = False
         try:
-            self.tunneling_sound = pygame.mixer.Sound("./Assets/Sounds/energyshieldsound.mp3")
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            parent1 = os.path.dirname(dir_path)
+            parent2 = os.path.dirname(parent1)
+            sound_path = "./Assets/Sounds/energyshieldsound.mp3"
+            total_path = os.path.join(parent2, sound_path)
+            self.tunneling_sound = pygame.mixer.Sound(total_path)
         except:
             self.tunneling_sound = None
         

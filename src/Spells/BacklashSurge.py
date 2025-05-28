@@ -3,7 +3,7 @@ import math
 import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
-
+import os
 class BacklashSurge(SpellBase):
     """Backlash Surge spell that applies vulnerability to a target (3x damage)"""
     
@@ -18,7 +18,12 @@ class BacklashSurge(SpellBase):
         
         # Sound effect
         self.sound_played = False
-        self.surge_sound = pygame.mixer.Sound("./Assets/Sounds/alarm.mp3") if pygame.mixer.get_init() else None
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        sound_path = "./Assets/Sounds/alarm.mp3"
+        total_path = os.path.join(parent2, sound_path)
+        self.surge_sound = pygame.mixer.Sound(total_path)
         
     def start(self):
         """Start the vulnerability effect"""

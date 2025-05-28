@@ -3,7 +3,7 @@ from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 from QuantumMechanics.QuantumTunneling import QuantumTunneling
 import time
-
+import os
 class Lightning(SpellBase):
     """Lightning spell that strikes a target"""
     
@@ -32,7 +32,13 @@ class Lightning(SpellBase):
         
         # Load the lightning sound effect
         self.sound_played = False
-        self.lightning_sound = pygame.mixer.Sound("./Assets/Sounds/lightning.wav")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        sound_path = "./Assets/Sounds/lightning.wav"
+        total_path = os.path.join(parent2, sound_path)
+        
+        self.lightning_sound = pygame.mixer.Sound(total_path)
         
     def animate_spell(self, caster, target):
         """Animate the lightning spell with frame delays"""

@@ -4,7 +4,7 @@ import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 from QuantumMechanics.QuantumTunneling import QuantumTunneling
-
+import os
 class MagicMissileV2(SpellBase):
     """Magic missile spell that reverses direction and hits the caster"""
     
@@ -37,7 +37,13 @@ class MagicMissileV2(SpellBase):
         self.missile_size = (72, 72)
         self.reversal_point = 0.5  # Point at which missiles reverse (0.5 = halfway)
         self.scale_factor = 2  # Scale the lightning to be twice as large
-        self.missile_sound = pygame.mixer.Sound("./Assets/Sounds/magicmissile.mp3")
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        sound_path = "./Assets/Sounds/magicmissile.mp3"
+        total_path = os.path.join(parent2, sound_path)
+        self.missile_sound = pygame.mixer.Sound(total_path)
         self.sound_played = False
 
     def animate_spell(self, caster, target):

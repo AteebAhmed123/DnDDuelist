@@ -21,7 +21,7 @@ from Cards.PhaseBias import PhaseBias
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from WeatherManager import WeatherManager
 from Utils.PhaseBiasManager import PhaseBiasManager
-
+import os
 class GameManager:
     def __init__(self):
         # Initialize Pygame
@@ -74,7 +74,11 @@ class GameManager:
         self.dt = 0  # Time delta between frames
 
     def setup_display(self):
-        background = pygame.image.load("./Assets/image.png")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        path = "./Assets/image.png"
+        total_path = os.path.join(parent1, path)
+        background = pygame.image.load(total_path)
         background = pygame.transform.scale(background, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         return background
     

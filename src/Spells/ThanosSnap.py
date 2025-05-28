@@ -3,7 +3,7 @@ import random
 import math
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
-
+import os
 class ThanosSnap(SpellBase):
     """Thanos Snap spell that makes the opponent discard half their cards"""
     
@@ -45,7 +45,13 @@ class ThanosSnap(SpellBase):
         
         # Sound effect
         self.sound_played = False
-        self.snap_sound = pygame.mixer.Sound("./Assets/Sounds/thanossnap.wav")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        sound_path_snap = "./Assets/Sounds/thanossnap.wav"
+        
+        total_path_snap = os.path.join(parent2, sound_path_snap)
+        self.snap_sound = pygame.mixer.Sound(total_path_snap)
         
     def animate_spell(self, caster, target):
         """Animate the Thanos Snap spell

@@ -2,7 +2,7 @@ import pygame
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 import time
-
+import os
 class Heal(SpellBase):
     """Lightning spell that strikes a target"""
     
@@ -36,7 +36,13 @@ class Heal(SpellBase):
         
         # Load the lightning sound effect
         self.sound_played = False
-        self.heal_sound = pygame.mixer.Sound("./Assets/Sounds/heal.mp3")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        sound_path = "./Assets/Sounds/heal.mp3"
+        total_path = os.path.join(parent2, sound_path)
+        
+        self.heal_sound = pygame.mixer.Sound(total_path)
         
     def animate_spell(self, caster, target):
         """Animate the lightning spell with frame delays"""

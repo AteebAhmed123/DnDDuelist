@@ -4,7 +4,7 @@ from Spells.SpellBase import SpellBase
 from SpriteUtil.SpriteUtil import SpriteUtil
 import math
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
-
+import os
 class HeatWave(WeatherSpells):
     """HeatWave spell that creates a heat/fire effect in the middle of the screen"""
     
@@ -50,8 +50,14 @@ class HeatWave(WeatherSpells):
         # Heat distortion effect
         self.heat_timer = 0
         self.heat_intensity = 0
-        
-        self.fire_sound = pygame.mixer.Sound("./Assets/Sounds/Weathers/Fire.mp3")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        parent3 = os.path.dirname(parent2)
+        total_path = os.path.join(parent3, "./Assets/Sounds/Weathers/Fire.mp3")
+
+
+        self.fire_sound = pygame.mixer.Sound(total_path)
         self.sound_playing = False
     
     def create_heat_effects(self):

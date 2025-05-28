@@ -3,7 +3,7 @@ import random
 from Spells.SpellBase import SpellBase
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
-
+import os
 class WindTornado(WeatherSpells):
     """WindTornado spell that creates a tornado effect in the middle of the screen"""
     
@@ -47,7 +47,14 @@ class WindTornado(WeatherSpells):
         self.create_wind_effects()
         
         # Wind sound effect (commented out for now)
-        self.wind_sound = pygame.mixer.Sound("./Assets/Sounds/Weathers/tornado.mp3")
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        parent3 = os.path.dirname(parent2)
+        total_path = os.path.join(parent3, "./Assets/Sounds/Weathers/tornado.mp3")
+
+        self.wind_sound = pygame.mixer.Sound(total_path)
         self.sound_playing = False
     
     def create_wind_effects(self):

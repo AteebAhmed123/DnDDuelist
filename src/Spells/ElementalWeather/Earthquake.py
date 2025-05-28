@@ -4,7 +4,7 @@ import math
 from Spells.SpellBase import SpellBase
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
-
+import os
 class Earthquake(WeatherSpells):
     """Earthquake spell that creates a nature disruption effect with trees falling down"""
     
@@ -54,7 +54,13 @@ class Earthquake(WeatherSpells):
         self.rock_particles = []
         self.create_particles()
         
-        self.crash_sound = pygame.mixer.Sound("./Assets/Sounds/Weathers/earthquake.mp3")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        parent3 = os.path.dirname(parent2)
+        total_path = os.path.join(parent3, "./Assets/Sounds/Weathers/earthquake.mp3")
+
+        self.crash_sound = pygame.mixer.Sound(total_path)
         self.sound_played = False
     
     def create_particles(self):

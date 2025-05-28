@@ -4,6 +4,7 @@ import random
 from SpriteUtil.SpriteUtil import SpriteUtil
 from Spells.SpellBase import SpellBase
 from Characters.DamageOverTurn import DamageOverTurn
+import os
 class Fireball(SpellBase):
     """Fireball spell that launches a fiery projectile at the target"""
     
@@ -44,8 +45,15 @@ class Fireball(SpellBase):
         
         # Load the fireball sound effects
         self.sound_played = False
-        self.launch_sound = pygame.mixer.Sound("./Assets/Sounds/Elementals/fire_launch.mp3")
-        self.explosion_sound = pygame.mixer.Sound("./Assets/Sounds/Elementals/fire_explosion.mp3")
+        self.sound_played = False
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        parent1 = os.path.dirname(dir_path)
+        parent2 = os.path.dirname(parent1)
+        parent3 = os.path.dirname(parent2)
+        soundlaunch = os.path.join(parent3, "./Assets/Sounds/Elementals/fire_launch.mp3")
+        soundexplosion = os.path.join(parent3, "./Assets/Sounds/Elementals/fire_explosion.mp3")
+        self.launch_sound = pygame.mixer.Sound(soundlaunch)
+        self.explosion_sound = pygame.mixer.Sound(soundexplosion)
     
     def animate_spell(self, caster, target):
         """Animate the fireball spell
