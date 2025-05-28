@@ -137,16 +137,12 @@ class Wizard(CharacterBlueprint):
                                 if (type(self.hand.cards_in_hand[eachCard]) == ElementalAfflication):
                                     if (weather_manager.weather_type == WeatherType.RAIN):
                                         self.hand.cards_in_hand[eachCard] = WaterGeyserCard(self.screen)
-                                        break
                                     elif (weather_manager.weather_type == WeatherType.WIND):
                                         self.hand.cards_in_hand[eachCard] = WindTornadoCard(self.screen)
-                                        break
                                     elif (weather_manager.weather_type == WeatherType.HEAT):
                                         self.hand.cards_in_hand[eachCard] = BurningHandCard(self.screen)
-                                        break
                                     elif (weather_manager.weather_type == WeatherType.EARTH):
                                         self.hand.cards_in_hand[eachCard] = EarthSpikeCard(self.screen)
-                                        break
                         return False
 
                     if (playing_spell == False):
@@ -158,16 +154,12 @@ class Wizard(CharacterBlueprint):
                                 if (type(self.hand.cards_in_hand[eachCard]) == ElementalAfflication):
                                     if (weather_manager.weather_type == WeatherType.RAIN):
                                         self.hand.cards_in_hand[eachCard] = WaterGeyserCard(self.screen)
-                                        break
                                     elif (weather_manager.weather_type == WeatherType.WIND):
                                         self.hand.cards_in_hand[eachCard] = WindTornadoCard(self.screen)
-                                        break
                                     elif (weather_manager.weather_type == WeatherType.HEAT):
                                         self.hand.cards_in_hand[eachCard] = BurningHandCard(self.screen)
-                                        break
                                     elif (weather_manager.weather_type == WeatherType.EARTH):
                                         self.hand.cards_in_hand[eachCard] = EarthSpikeCard(self.screen)
-                                        break
                         self.damage_over_turn_applied = False
                         return False
         return True
