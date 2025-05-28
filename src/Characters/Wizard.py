@@ -9,6 +9,7 @@ from Spells.Barrier import StaticBarrierShield
 from Spells.BacklashSurge import StaticVulnerabilityEffect
 from Cards.ElementalDeck import ElementalDeck
 from Cards.ElementalWeather import ElementalWeather
+from Cards.PhaseBias import PhaseBias
 from Spells.ElementalWeather.WeatherSpells import WeatherSpells
 from Cards.ElementalAfflication import ElementalAfflication
 from WeatherManager import WeatherType
@@ -72,6 +73,9 @@ class Wizard(CharacterBlueprint):
         
         # Card display effect
         self.card_display = None
+        
+        # Phase bias manager
+        self.phase_bias_manager = None
 
     def get_sprites(self):
         return self.sprite_states[self.current_state]
@@ -191,6 +195,22 @@ class Wizard(CharacterBlueprint):
         if card_index >= 0 and card_index < len(self.hand.cards_in_hand):
             selected_card = self.hand.cards_in_hand[card_index]
             
+            # Check if it's a Phase Bias card
+            if isinstance(selected_card, PhaseBias):
+                # Start Phase Bias targeting
+                if self.phase_bias_manager:
+                    targeting_success = self.phase_bias_manager.start_targeting(selected_card, self.hand.cards_in_hand)
+                    if targeting_success:
+                        # Remove the Phase Bias card from hand only if targeting started successfully
+                        self.hand.remove_card(card_index)
+                        if (len(self.deck.cards_in_deck) > 0):
+                            self.hand.add_card(self.deck.draw_card_from_deck(1)[0])
+                    else:
+                        # Targeting failed (no valid targets), show a message or just do nothing
+                        # The card remains in hand
+                        pass
+                return None
+            
             # Display the card if we have a card display effect
             if self.card_display:
                 self.card_display.start(selected_card)
@@ -220,6 +240,10 @@ class Wizard(CharacterBlueprint):
     def set_card_display(self, card_display):
         """Set the card display effect for this character"""
         self.card_display = card_display
+    
+    def set_phase_bias_manager(self, phase_bias_manager):
+        """Set the phase bias manager for this character"""
+        self.phase_bias_manager = phase_bias_manager
     # def draw_new_hand(self):
     #     """Draw a new hand from the deck"""
     #     self.deck.draw_hand()

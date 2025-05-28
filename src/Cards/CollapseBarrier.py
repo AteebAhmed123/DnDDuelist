@@ -27,39 +27,54 @@ class CollapseBarrier(CardBlueprint):
         Superposition.apply_superposition_to_qubit(self.qubit, total_states=2)
         self.collapsedState = None
         
-        # Phase bias attributes
+        # Phase bias properties
         self.has_phase_bias = False
-        self.phase_bias_state = None
-        self.phase_bias_strength = 0.5
-
+        self.favored_state = None
+        self.bias_strength = 0.5  # Default no bias
 
     def get_sprite_coords(self):
         return self.CARD_COORDS
     
+    def apply_phase_bias(self, favored_state, bias_strength):
+        """Apply phase bias to this card"""
+        self.has_phase_bias = True
+        self.favored_state = favored_state
+        self.bias_strength = bias_strength
+        
+        # Recreate the quantum circuit with bias
+        self.qubit = QuantumCircuit(1, 1)
+        if self.has_phase_bias:
+            Superposition.apply_superposition_with_bias(
+                self.qubit, 
+                total_states=2, 
+                favored_state=self.favored_state, 
+                bias_strength=self.bias_strength
+            )
+        else:
+            Superposition.apply_superposition_to_qubit(self.qubit, total_states=2)
+    
     def activate_card(self, caster, target):
         if self.stateType == QuantumState.SUPERPOSITION:
-            # Check if phase bias has been applied
-            if self.has_phase_bias and self.phase_bias_state:
-                # Create a new biased quantum circuit
-                biased_qubit = QuantumCircuit(1, 1)
-                Superposition.apply_biased_superposition_to_qubit(
-                    biased_qubit, 
-                    total_states=2, 
-                    bias_state=self.phase_bias_state, 
-                    bias_strength=self.phase_bias_strength
+            if self.has_phase_bias:
+                self.collapsedState = Superposition.collapse_qubit_with_bias(
+                    self.qubit, 
+                    self.favored_state, 
+                    self.bias_strength
                 )
-                self.collapsedState = Superposition.collapse_qubit(biased_qubit)
-                print(f"CollapseBarrier collapsed with bias toward {self.phase_bias_state}: result = {self.collapsedState}")
             else:
-                # Normal collapse without bias
                 self.collapsedState = Superposition.collapse_qubit(self.qubit)
-                print(f"CollapseBarrier collapsed normally: result = {self.collapsedState}")
-            
             self.stateType = QuantumState.COLLAPSED
         
         if (self.collapsedState != None):
             if (self.collapsedState == '0'):
                 return self.barrier.animate_spell(caster, target), None
             elif (self.collapsedState == '1'):
-                return self.vulnerable.animate_spell(caster, target), None                
+                return self.vulnerable.animate_spell(caster, target), None
+    
+    def get_possible_states(self):
+        """Return the possible states for this card for UI selection"""
+        return {
+            '0': "Barrier Shield (blocks next attack)",
+            '1': "Vulnerability (3x damage on next attack)"
+        }
     

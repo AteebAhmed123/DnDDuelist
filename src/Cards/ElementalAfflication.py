@@ -75,9 +75,9 @@ class ElementalAfflication(CardBlueprint):
 
     def interpret_weather_state(self, state):
         if state == '00':
-            return Nature(self.screen)
-        elif state == '01':
             return RainWeather(self.screen)
+        elif state == '01':
+            return Nature(self.screen)
         elif state == '11':
             return HeatwaveWeather(self.screen)
         elif state == '10':

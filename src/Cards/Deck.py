@@ -18,7 +18,7 @@ class Deck(AllDecks):
         # ThanosSnapCard: 0.20,
         CollapseBarrier: 0.15,
         ElementalAfflication: 0.45,
-        PhaseBias: 0.10
+        PhaseBias: 0.1  # 10% chance for Phase Bias cards
         # ElementalWeather: 0.5
     }
 
